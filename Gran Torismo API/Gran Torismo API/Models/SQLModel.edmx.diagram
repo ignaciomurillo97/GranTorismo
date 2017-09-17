@@ -4,7 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="edadde36ae464619a647b763af19af61" Name="Diagram1" />
+      <Diagram DiagramId="edadde36ae464619a647b763af19af61" Name="Diagram1" >
+        <EntityTypeShape EntityType="GranTorismoModel.Categories" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

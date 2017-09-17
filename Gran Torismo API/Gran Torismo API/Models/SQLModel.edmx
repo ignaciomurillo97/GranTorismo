@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GranTorismoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GranTorismoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="IdCategory" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="IdCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <Function Name="PR_ClientLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
@@ -22,7 +32,14 @@
           <Parameter Name="AccountNumber" Type="numeric" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
-        <EntityContainer Name="GranTorismoModelStoreContainer" />
+        <EntityContainer Name="GranTorismoModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="Self.Categories" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Categories].[IdCategory] AS [IdCategory], 
+    [Categories].[Name] AS [Name]
+    FROM [dbo].[Categories] AS [Categories]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -45,7 +62,16 @@
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="Categories" EntityType="GranTorismoModel.Categories" />
         </EntityContainer>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="IdCategory" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="IdCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -54,6 +80,14 @@
         <EntityContainerMapping StorageEntityContainer="GranTorismoModelStoreContainer" CdmEntityContainer="SQLEntities" >
           <FunctionImportMapping FunctionImportName="PR_CreateClient" FunctionName="GranTorismoModel.Store.PR_CreateClient" />
           <FunctionImportMapping FunctionImportName="PR_ClientLogin" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="GranTorismoModel.Categories">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

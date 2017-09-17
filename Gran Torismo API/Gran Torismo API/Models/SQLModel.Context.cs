@@ -27,6 +27,7 @@ namespace Gran_Torismo_API.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Categories> Categories { get; set; }
     
         public virtual int PR_CreateClient(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, Nullable<decimal> accountNumber, ObjectParameter responseMessage)
         {
