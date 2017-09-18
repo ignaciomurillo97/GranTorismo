@@ -32,7 +32,7 @@ namespace NeoConnect
         }
 
         // Agrega un usuario 
-        public void agregarUsuario(int idUsuario)
+        public void AddUser(int idUsuario)
         {
             var usuario = new { IdCard = idUsuario };
             graphClient.Cypher.Create("(n:usuario{usuario})")
@@ -41,7 +41,7 @@ namespace NeoConnect
         }
 
         // Agrega un producto
-        public void agregarProducto(int idProducto)
+        public void AddProduct(int idProducto)
         {
             var producto = new { IdProduct = idProducto };
             graphClient.Cypher.Create("(n:producto{producto})")
@@ -49,11 +49,9 @@ namespace NeoConnect
                 .ExecuteWithoutResults();
         }
 
-        // Agrega un producto 
-        public void verProducto(int idUsuario, int idProducto)
+        // Agrega una relacion usuario producto de vista
+        public void AddView(int idUsuario, int idProducto)
         {
-            Dictionary<String, Object> parametrosRelacion = new Dictionary<string, object>();
-
             graphClient.Cypher
                 .Match("(a:usuario), (b:producto)")
                 .Where((NeoUser a) => a.IdCard == idUsuario)
@@ -62,7 +60,19 @@ namespace NeoConnect
                 .ExecuteWithoutResults();
         }
 
-        public List<NeoUser> getAllUsers()
+        // Agrega una relacion usuario producto de compra
+        public void AddPurchase(int idUsuario, int idProducto)
+        {
+            graphClient.Cypher
+                .Match("(a:usuario), (b:producto)")
+                .Where((NeoUser a) => a.IdCard == idUsuario)
+                .AndWhere((NeoProduct b) => b.IdProduct == idProducto)
+                .Create("(a)-[:compro]->(b)")
+                .ExecuteWithoutResults();
+        }
+
+        // Devuelve todos los usuarios
+        public List<NeoUser> GetAllUsers()
         {
             List<NeoUser> res = graphClient.Cypher
                 .Match("(user:usuario)")
@@ -71,7 +81,8 @@ namespace NeoConnect
             return res;
         }
 
-        public List<NeoProduct> getAllProducts()
+        // Devueve todos los productos
+        public List<NeoProduct> GetAllProducts()
         {
             List<NeoProduct> res = graphClient.Cypher
                 .Match("(product:producto)")
@@ -79,5 +90,19 @@ namespace NeoConnect
                 .Results.ToList();
             return res;
         }
+
+        public List<NeoProduct> GetRecomendationsByView(int userId)
+        {
+            List<NeoProduct> res = graphClient.Cypher
+                .Match("(persona1:usuario) -[:vio]->(producto1:producto) <-[:vio]- (persona2:usuario) -[vistas:vio]-> (producto2:producto)")
+                .Where("persona1.IdCard = 2")
+                .AndWhere("NOT (persona1)-[:vio]->(producto2)")
+                .With("producto2, count(vistas) as rels")
+                .OrderByDescending("rels")
+                .ReturnDistinct(producto2 => producto2.As<NeoProduct>())
+                .Results.ToList();
+            return res;
+        }
+
     }
 }

@@ -22,7 +22,7 @@ namespace Gran_Torismo_API.Controllers
                 return BadRequest(ModelState);
             }
             var neo = NeoConnection.Instance;
-            neo.agregarUsuario(idUsuario);
+            neo.AddUser(idUsuario);
             return Ok(idUsuario);
         }
 
@@ -34,35 +34,68 @@ namespace Gran_Torismo_API.Controllers
                 return BadRequest(ModelState);
             }
             var neo = NeoConnection.Instance;
-            neo.agregarProducto(idProducto);
+            neo.AddProduct(idProducto);
             return Ok(idProducto);
         }
 
         [Route("api/Producto/Registrar/Vista")]
-        public IHttpActionResult VerProducto(int idUsuario, int idProducto)
+        public IHttpActionResult RegistrarVista(int idUsuario, int idProducto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var neo = NeoConnection.Instance;
-            neo.verProducto(idUsuario, idProducto);
+            neo.AddView(idUsuario, idProducto);
+            return Ok("orkas");
+        }
+
+        [Route("api/Producto/Registrar/Compra")]
+        public IHttpActionResult RegistrarCompra(int idUsuario, int idProducto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var neo = NeoConnection.Instance;
+            neo.AddPurchase(idUsuario, idProducto);
             return Ok("orkas");
         }
 
         [Route("api/Usuario")]
         public IHttpActionResult getAllUsers()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var neo = NeoConnection.Instance;
-            List<NeoUser> res = neo.getAllUsers();
+            List<NeoUser> res = neo.GetAllUsers();
             return Ok(res);
         }
 
         [Route("api/Producto")]
         public IHttpActionResult getAllProducts()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var neo = NeoConnection.Instance;
-            List<NeoProduct> res = neo.getAllProducts();
+            List<NeoProduct> res = neo.GetAllProducts();
+            return Ok(res);
+        }
+
+        [Route ("api/Producto/RecomendationsByView")]
+        [HttpPost]
+        public IHttpActionResult GetRecomendationsByView (int idUsuario)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var neo = NeoConnection.Instance;
+            List<NeoProduct> res = neo.GetRecomendationsByView(idUsuario);
             return Ok(res);
         }
     }
