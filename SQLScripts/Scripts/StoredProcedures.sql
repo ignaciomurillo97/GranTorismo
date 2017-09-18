@@ -81,3 +81,10 @@ CREATE PROCEDURE [PR_ClientLogin](
 		SET @responseMessage = 'Invalid Login'
 END
 GO
+
+CREATE PROCEDURE [PR_GetUser](
+	@IdCard NUMERIC(20)
+)AS BEGIN
+	SELECT * FROM [ClientDetails] WHERE IdCard = @IdCard
+END
+GO

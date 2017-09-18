@@ -28,6 +28,7 @@ namespace Gran_Torismo_API.Models
         }
     
         public virtual DbSet<Categories> Categories { get; set; }
+        public virtual DbSet<ClientDetails> ClientDetails { get; set; }
     
         public virtual int PR_CreateClient(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, Nullable<decimal> accountNumber, ObjectParameter responseMessage)
         {
@@ -77,6 +78,15 @@ namespace Gran_Torismo_API.Models
                 new ObjectParameter("Password", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_ClientLogin", usernameParameter, passwordParameter, responseMessage, idCard);
+        }
+    
+        public virtual ObjectResult<PR_GetUser_Result> PR_GetUser(Nullable<decimal> idCard)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetUser_Result>("PR_GetUser", idCardParameter);
         }
     }
 }
