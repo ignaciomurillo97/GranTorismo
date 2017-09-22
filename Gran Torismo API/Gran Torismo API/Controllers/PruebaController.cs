@@ -86,7 +86,42 @@ namespace Gran_Torismo_API.Controllers
             return Ok(res);
         }
 
-        [Route ("api/Producto/RecomendationsByView")]
+        [Route("api/Usuario/Follows")]
+        [HttpPost]
+        public IHttpActionResult getFollows(int idUsuario)
+        {
+            var neo = NeoConnection.Instance;
+            List<NeoUser> follows = neo.GetUserFollows(idUsuario);
+            return Ok(follows);
+        }
+
+        [Route("api/Usuario/AddFollower")]
+        [HttpPost]
+        public IHttpActionResult addFollow(int idFollower, int idFollowed)
+        {
+            if (idFollower != idFollowed)
+            {
+                var neo = NeoConnection.Instance;
+                neo.addFollowing(idFollower, idFollowed);
+                return Ok(1);
+            }
+            return Ok(0);
+        }
+
+        [Route("api/Usuario/DeleteFollower")]
+        [HttpPost]
+        public IHttpActionResult DeleteFollow(int idFollower, int idFollowed)
+        {
+            if (idFollower != idFollowed)
+            {
+                var neo = NeoConnection.Instance;
+                neo.removeFollowing(idFollower, idFollowed);
+                return Ok(1);
+            }
+            return Ok(0);
+        }
+
+        [Route ("api/Producto/RecomendationsByViews")]
         [HttpPost]
         public IHttpActionResult GetRecomendationsByView (int idUsuario)
         {
@@ -95,8 +130,22 @@ namespace Gran_Torismo_API.Controllers
                 return BadRequest(ModelState);
             }
             var neo = NeoConnection.Instance;
-            List<NeoProduct> res = neo.GetRecomendationsByView(idUsuario);
+            List<NeoProduct> res = neo.getRecomendationsByViews(idUsuario);
             return Ok(res);
         }
+
+        [Route("api/Producto/RecomendationsByCurrentView")]
+        [HttpPost]
+        public IHttpActionResult GetRecomendationsByCurrentView(int idProducto, int idUsuario)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var neo = NeoConnection.Instance;
+            List<NeoProduct> res = neo.GetRecomendationsByCurrentView(idProducto, idUsuario);
+            return Ok(res);
+        }
+
     }
 }
