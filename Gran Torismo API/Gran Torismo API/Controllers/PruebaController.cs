@@ -147,41 +147,7 @@ namespace Gran_Torismo_API.Controllers
             List<NeoProduct> res = neo.GetRecomendationsByCurrentView(idProducto, idUsuario);
             return Ok(res);
         }
-        [Route("api/Cart/Add")]
-        [HttpPost]
-        public IHttpActionResult AddCart(int userId, int productId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Redis.AddToCart(userId, productId);
-            return Ok(1);
-        }
-
-        [Route("api/Cart/DeleteItem")]
-        [HttpPost]
-        public IHttpActionResult DeleteItem(int userId, int productId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Redis.DeleteFromCart(userId, productId);
-            return Ok(1);
-        }
-
-        [Route("api/Cart/")]
-        [HttpPost]
-        public IHttpActionResult GetCart(int userId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            List<int> cart = Redis.GetCart(userId);
-            return Ok(cart);
-        }
+        
 
     }
 }
