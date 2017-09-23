@@ -1,0 +1,154 @@
+CREATE DATABASE GranTorismo
+GO
+
+USE GranTorismo
+GO
+
+CREATE TABLE [User] (
+	[IdCard] NUMERIC(20) NOT NULL,
+	[Username] VARCHAR(25) NOT NULL UNIQUE,
+	[PasswordHash] BINARY(64) NOT NULL,
+	[FirstName] VARCHAR(50) NOT NULL,
+	[MiddleName] VARCHAR(50),
+	[LastName] VARCHAR(50) NOT NULL,
+	[SecondLastName] VARCHAR(50),
+	[Salt] UNIQUEIDENTIFIER 
+	CONSTRAINT PK_User PRIMARY KEY(IdCard)
+);
+GO
+
+CREATE TABLE [Client] (
+	[IdCard] NUMERIC(20) NOT NULL,
+	[AccountNumber] NUMERIC(20) NOT NULL,
+	CONSTRAINT PK_Client PRIMARY KEY(IdCard),
+	CONSTRAINT FK_ClientId FOREIGN KEY (IdCard) REFERENCES [User]
+);
+GO
+
+CREATE TABLE [Owner] (
+	[IdCard] NUMERIC(20) NOT NULL,
+	CONSTRAINT PK_Owner PRIMARY KEY(IdCard),
+	CONSTRAINT FK_OwnerId FOREIGN KEY (IdCard) REFERENCES [User]
+);
+GO
+
+CREATE TABLE [Admin] (
+	[IdCard] NUMERIC(20) NOT NULL,
+	CONSTRAINT PK_Admin PRIMARY KEY(IdCard),
+	CONSTRAINT FK_AdminId FOREIGN KEY (IdCard) REFERENCES [User]
+);
+GO
+
+CREATE TABLE [Country] (
+  [IdCountry] INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL
+  CONSTRAINT PK_IdCountry PRIMARY KEY(IdCountry)
+);
+GO
+
+CREATE TABLE [Province] (
+  [IdProvince] INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL,
+  [IdCountry] INT NOT NULL
+  CONSTRAINT PK_IdProvince PRIMARY KEY(IdProvince)
+  CONSTRAINT Fk_IdCountry FOREIGN KEY(IdCountry) REFERENCES [Country]
+);
+GO
+
+CREATE TABLE [Canton] (
+  [IdCanton] INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL,
+  [IdProvince] INT NOT NULL
+  CONSTRAINT PK_IdCanton PRIMARY KEY(IdCanton),
+  CONSTRAINT FK_IdProvince FOREIGN KEY(IdProvince) REFERENCES [Province]
+);
+GO
+
+CREATE TABLE [District] (
+  [IdDistrict] INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL,
+  [IdCanton] INT NOT NULL
+  CONSTRAINT PK_IdDistrict PRIMARY KEY(IdDistrict),
+  CONSTRAINT FK_IdCanton FOREIGN KEY(IdCanton) REFERENCES [Canton]
+);
+GO
+
+CREATE TABLE [Follower] (
+  [IdCard] NUMERIC(20) NOT NULL,
+  [IdFriend] NUMERIC(20) NOT NULL
+  CONSTRAINT PK_Follower PRIMARY KEY(IdCard, IdFriend)
+  CONSTRAINT FK_Follower FOREIGN KEY(IdCard) REFERENCES [Client] ON UPDATE CASCADE,
+  CONSTRAINT FK_Follow FOREIGN KEY(IdFriend) REFERENCES [Client]
+);
+GO
+
+CREATE TABLE [Product] (
+  [IdProduct]	INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL,
+  [Price] MONEY NOT NULL,
+  [Description] VARCHAR(MAX),
+  [IdDistrict] INT NOT NULL,
+  [State] BIT NOT NULL DEFAULT 1
+  CONSTRAINT PK_IdProduct PRIMARY KEY(IdProduct),
+  CONSTRAINT FK_IdDistrict FOREIGN KEY(IdDistrict) REFERENCES [District]
+);
+GO
+
+CREATE TABLE [Category](
+  [IdCategory] INT NOT NULL IDENTITY(1,1),
+  [Name] VARCHAR(50) NOT NULL,
+  CONSTRAINT PK_Category PRIMARY KEY(IdCategory)
+);
+GO
+
+CREATE TABLE [ProductCategory](
+  [IdProduct] INT NOT NULL,
+  [IdCategory] INT NOT NULL
+  CONSTRAINT PK_ProductCategory PRIMARY KEY(IdProduct,IdCategory)
+  CONSTRAINT FK_ProductCategoryProduct FOREIGN KEY(IdProduct) REFERENCES [Product] ON DELETE CASCADE,
+  CONSTRAINT FK_ProductCategoryCategory FOREIGN KEY(IdCategory) REFERENCES [Category]
+);
+GO
+
+CREATE TABLE [Package](
+  [IdPackage] INT NOT NULL,
+  [IdProduct] INT NOT NULL
+  CONSTRAINT PK_Package PRIMARY KEY(IdPackage,IdProduct)
+  CONSTRAINT FK_PackagePackage FOREIGN KEY(IdProduct) REFERENCES [Product] ON DELETE CASCADE,
+  CONSTRAINT FK_PackageProduct FOREIGN KEY(IdProduct) REFERENCES [Product]
+);
+GO
+
+
+CREATE TABLE [Check](
+  [IdCheck] INT NOT NULL IDENTITY(1,1),
+  [Date] DATE NOT NULL,
+  [IdClient] NUMERIC(20) NOT NULL,
+  CONSTRAINT PK_Check PRIMARY KEY(IdCheck),
+  CONSTRAINT FK_CheckClient FOREIGN KEY(IdClient) REFERENCES [Client] ON DELETE CASCADE,
+);
+GO
+
+CREATE TABLE [CheckDetail] (
+  [IdDetail] INT NOT NULL IDENTITY(1,1),
+  [IdCheck] INT NOT NULL,
+  [ProdcutName] VARCHAR(50) NOT NULL,
+  [UnitaryPrice] MONEY NOT NULL,
+  [Quantity] INT NOT NULL DEFAULT 1
+  CONSTRAINT PK_IdDetail PRIMARY KEY(IdDetail),
+  CONSTRAINT FK_IdDetailCheck FOREIGN KEY(IdCheck) REFERENCES [Check]
+);
+GO
+
+
+CREATE TABLE [Review] (
+  [IdReview] INT NOT NULL IDENTITY(1,1),
+  [IdClient] NUMERIC(20) NOT NULL,
+  [IdCheck] INT NOT NULL,
+  [Date] DATETIME NOT NULL DEFAULT GETDATE(),
+  [Description] VARCHAR(255) NOT NULL,
+  [Rating] NUMERIC(1) NOT NULL DEFAULT 1
+  CONSTRAINT PK_IdReview PRIMARY KEY(IdReview)
+  CONSTRAINT FK_ReviewIdClient FOREIGN KEY(IdClient) REFERENCES [Client] ON UPDATE CASCADE,
+  CONSTRAINT FK_ReviewIdCheck FOREIGN KEY([IdCheck]) REFERENCES [Check]
+);

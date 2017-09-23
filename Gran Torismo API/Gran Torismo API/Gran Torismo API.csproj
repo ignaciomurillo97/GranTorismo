@@ -198,11 +198,18 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PruebaController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Categories.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginModels.cs" />
     <Compile Include="Models\NeoConnection.cs" />
+    <Compile Include="Models\PR_GetUser_Result.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SQLModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,8 +237,8 @@
     <Content Include="Global.asax" />
     <Content Include="Models\SQLModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SQLModel.Context.cs</LastGenOutput>
       <DependentUpon>SQLModel.edmx</DependentUpon>
+      <LastGenOutput>SQLModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\SQLModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

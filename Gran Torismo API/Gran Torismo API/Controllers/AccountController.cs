@@ -16,7 +16,7 @@ namespace Gran_Torismo_API.Controllers
         private SQLEntities db = new SQLEntities();
 
         // POST: api/Users
-        [Route("api/Register/User")]
+        [Route("api/Register/User/Client")]
         [ResponseType(typeof(Client))]
         public IHttpActionResult PostClient(Client user)
         {
@@ -56,6 +56,20 @@ namespace Gran_Torismo_API.Controllers
             }
 
             return Ok(r);
+        }
+
+        // POST: api/User/5
+        [Route("api/User/{id}")]
+        [ResponseType(typeof(PR_GetUser_Result))]
+        public IHttpActionResult GetUser(int id)
+        {
+            var loginModel = db.PR_GetUser(id).FirstOrDefault();
+            if (loginModel == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(loginModel);
         }
     }
 }
