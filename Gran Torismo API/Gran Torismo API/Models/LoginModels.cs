@@ -18,6 +18,7 @@ namespace Gran_Torismo_API.Models
         public bool Success { get; set; }
         public string Msg { get; set; }
         public int IdCard { get; set; }
+        public string Role { get; set; }
     }
 
     public partial class RegisterResponse
