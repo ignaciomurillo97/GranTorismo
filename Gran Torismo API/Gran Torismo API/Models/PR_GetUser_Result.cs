@@ -19,6 +19,6 @@ namespace Gran_Torismo_API.Models
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string SecondLastName { get; set; }
-        public decimal AccountNumber { get; set; }
+        public Nullable<decimal> AccountNumber { get; set; }
     }
 }

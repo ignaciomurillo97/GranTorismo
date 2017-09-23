@@ -15,12 +15,6 @@ warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primar
           <Property Name="IdCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <Function Name="PR_ClientLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Username" Type="nvarchar" Mode="In" />
-          <Parameter Name="Password" Type="nvarchar" Mode="In" />
-          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
-          <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
-        </Function>
         <Function Name="PR_CreateClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -32,8 +26,25 @@ warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primar
           <Parameter Name="AccountNumber" Type="numeric" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_CreateOwner" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="MiddleName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+        </Function>
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PR_UsersLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
+          <Parameter Name="Rol" Type="varchar" Mode="InOut" />
         </Function>
         <EntityContainer Name="GranTorismoModelStoreContainer">
           <EntitySet Name="Categories" EntityType="Self.Categories" store:Type="Views" store:Schema="dbo">
@@ -66,6 +77,23 @@ warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primar
             <Parameter Name="AccountNumber" Mode="In" Type="Decimal" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PR_UsersLogin">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
+            <Parameter Name="Rol" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_CreateOwner">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="MiddleName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="SecondLastName" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="PR_GetUser" ReturnType="Collection(GranTorismoModel.PR_GetUser_Result)">
             <Parameter Name="IdCard" Mode="In" Type="Decimal" />
           </FunctionImport>
@@ -85,7 +113,7 @@ warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primar
           <Property Type="String" Name="MiddleName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="AccountNumber" Nullable="false" Precision="20" Scale="0" />
+          <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -101,8 +129,9 @@ warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PR_ClientLogin" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
           <FunctionImportMapping FunctionImportName="PR_CreateClient" FunctionName="GranTorismoModel.Store.PR_CreateClient" />
+          <FunctionImportMapping FunctionImportName="PR_UsersLogin" FunctionName="GranTorismoModel.Store.PR_UsersLogin" />
+          <FunctionImportMapping FunctionImportName="PR_CreateOwner" FunctionName="GranTorismoModel.Store.PR_CreateOwner" />
           <FunctionImportMapping FunctionImportName="PR_GetUser" FunctionName="GranTorismoModel.Store.PR_GetUser">
             <ResultMapping>
               <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetUser_Result">

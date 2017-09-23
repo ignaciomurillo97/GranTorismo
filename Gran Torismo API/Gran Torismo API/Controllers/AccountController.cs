@@ -31,6 +31,22 @@ namespace Gran_Torismo_API.Controllers
             return Ok(response);
         }
 
+        // POST: api/Users
+        [Route("api/Register/User/Owner")]
+        [ResponseType(typeof(Owner))]
+        public IHttpActionResult PostOwner(Owner user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ObjectParameter output = new ObjectParameter("responseMessage", typeof(string));
+            db.PR_CreateOwner(user.User.IdCard, user.User.Username, user.User.Password, user.User.FirstName, user.User.MiddleName, user.User.LastName,
+                user.User.SecondLastName, output);
+            RegisterResponse response = new RegisterResponse() { Response = output.Value.ToString() };
+            return Ok(response);
+        }
+
         // POST: api/Login
         [Route("api/Login/Authenticate")]
         [ResponseType(typeof(LoginRequest))]
@@ -43,8 +59,9 @@ namespace Gran_Torismo_API.Controllers
 
             ObjectParameter Output = new ObjectParameter("responseMessage", typeof(string));
             ObjectParameter idCard = new ObjectParameter("idCard", typeof(int));
-            db.PR_ClientLogin(loginModel.Username, loginModel.Password, Output, idCard);
-            var r = new LoginResponse() { Success = false, Msg = Output.Value.ToString() };
+            ObjectParameter role = new ObjectParameter("rol", typeof(string));
+            db.PR_UsersLogin(loginModel.Username, loginModel.Password, Output, idCard, role);
+            var r = new LoginResponse() { Success = false, Msg = Output.Value.ToString(), Role = role.Value.ToString()};
             if (!(idCard.Value is DBNull))
             {
                 r.IdCard = Convert.ToInt32(idCard.Value);
@@ -67,6 +84,11 @@ namespace Gran_Torismo_API.Controllers
             if (loginModel == null)
             {
                 return NotFound();
+            }
+
+            if (loginModel.AccountNumber == null)
+            {
+                loginModel.AccountNumber = 0;
             }
 
             return Ok(loginModel);
