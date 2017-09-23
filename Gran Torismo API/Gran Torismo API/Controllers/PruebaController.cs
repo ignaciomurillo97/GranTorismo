@@ -5,9 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity.Core.Objects;
-using NeoConnect;
 using Gran_Torismo_API.Models;
 using Gran_Torismo_API.NeoHelper;
+using NeoConnect;
+using RedisConnect;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -145,6 +146,41 @@ namespace Gran_Torismo_API.Controllers
             var neo = NeoConnection.Instance;
             List<NeoProduct> res = neo.GetRecomendationsByCurrentView(idProducto, idUsuario);
             return Ok(res);
+        }
+        [Route("api/Cart/Add")]
+        [HttpPost]
+        public IHttpActionResult AddCart(int userId, int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Redis.AddToCart(userId, productId);
+            return Ok(1);
+        }
+
+        [Route("api/Cart/DeleteItem")]
+        [HttpPost]
+        public IHttpActionResult DeleteItem(int userId, int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Redis.DeleteFromCart(userId, productId);
+            return Ok(1);
+        }
+
+        [Route("api/Cart/")]
+        [HttpPost]
+        public IHttpActionResult GetCart(int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            List<int> cart = Redis.GetCart(userId);
+            return Ok(cart);
         }
 
     }
