@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using NeoConnect;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -27,6 +28,8 @@ namespace Gran_Torismo_API.Controllers
             ObjectParameter output = new ObjectParameter("responseMessage", typeof(string));
             db.PR_CreateClient(user.User.IdCard, user.User.Username, user.User.Password, user.User.FirstName, user.User.MiddleName, user.User.LastName,
                 user.User.SecondLastName, user.AccountNumber, output);
+            var neo = NeoConnection.Instance;
+            neo.AddUser(Decimal.ToInt32(user.User.IdCard));
             RegisterResponse response = new RegisterResponse() { Response = output.Value.ToString() };
             return Ok(response);
         }

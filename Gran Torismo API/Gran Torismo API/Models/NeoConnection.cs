@@ -32,9 +32,9 @@ namespace NeoConnect
         }
 
         // Agrega un usuario 
-        public void AddUser(int idUsuario)
+        public void AddUser(int userId)
         {
-            var user = new { IdCard = idUsuario };
+            var user = new { IdCard = userId };
             graphClient.Cypher
                 .Merge("(user:user {IdCard: {IdCard}})")
                 .OnCreate()
@@ -47,10 +47,20 @@ namespace NeoConnect
                 .ExecuteWithoutResults();
         }
 
-        // Agrega un producto
-        public void AddProduct(int idProducto)
+        // Borra un usuario de Neo
+        public void RemoveUser(int userId)
         {
-            var product = new { IdProduct = idProducto };
+            graphClient.Cypher
+                .Match("user:user")
+                .Where((NeoUser user) => user.IdCard == userId)
+                .Delete("user")
+                .ExecuteWithoutResults();
+        }
+
+        // Agrega un producto
+        public void AddProduct(int productId)
+        {
+            var product = new { IdProduct = productId };
             graphClient.Cypher
                 .Merge("(product:product {IdProduct: {IdProduct}})")
                 .OnCreate()
@@ -63,29 +73,39 @@ namespace NeoConnect
                 .ExecuteWithoutResults();
         }
 
+        // Borra un producto de Neo
+        public void RemoveProduct(int productId)
+        {
+            graphClient.Cypher
+                .Match("(product:product)")
+                .Where((NeoProduct product) => product.IdProduct == productId)
+                .Delete("product")
+                .ExecuteWithoutResults();
+        }
+
         // Agrega una relacion usuario producto de vista
-        public void AddView(int idUsuario, int idProducto)
+        public void AddView(int userId, int productId)
         {
             graphClient.Cypher
                 .Match("(a:user), (b:product)")
-                .Where((NeoUser a) => a.IdCard == idUsuario)
-                .AndWhere((NeoProduct b) => b.IdProduct == idProducto)
+                .Where((NeoUser a) => a.IdCard == userId)
+                .AndWhere((NeoProduct b) => b.IdProduct == productId)
                 .Create("(a)-[:viewed]->(b)")
                 .ExecuteWithoutResults();
         }
 
         // Agrega una relacion usuario producto de compra
-        public void AddPurchase(int idUsuario, int idProducto)
+        public void AddPurchase(int userId, int productId)
         {
             graphClient.Cypher
                 .Match("(a:user), (b:product)")
-                .Where((NeoUser a) => a.IdCard == idUsuario)
-                .AndWhere((NeoProduct b) => b.IdProduct == idProducto)
+                .Where((NeoUser a) => a.IdCard == userId)
+                .AndWhere((NeoProduct b) => b.IdProduct == productId)
                 .Create("(a)-[:purchased]->(b)")
                 .ExecuteWithoutResults();
         }
 
-        public void addFollowing(int followerId, int followedId)
+        public void AddFollowing(int followerId, int followedId)
         {
             graphClient.Cypher
                 .Match("(a:user), (b:user)")
@@ -95,7 +115,7 @@ namespace NeoConnect
                 .ExecuteWithoutResults();
         }
 
-        public void removeFollowing(int followerId, int followedId)
+        public void RemoveFollowing(int followerId, int followedId)
         {
             graphClient.Cypher
                 .Match("(follower:user)-[r:follows]->(followed:user)")

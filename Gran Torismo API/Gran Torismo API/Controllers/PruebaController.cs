@@ -14,43 +14,6 @@ namespace Gran_Torismo_API.Controllers
 {
     public class PruebaController : ApiController
     {
-
-        [Route("api/Usuario/Crear")]
-        public IHttpActionResult CrearUsuario(int idUsuario)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var neo = NeoConnection.Instance;
-            neo.AddUser(idUsuario);
-            return Ok(idUsuario);
-        }
-
-        [Route("api/Producto/Crear")]
-        public IHttpActionResult CrearProducto(int idProducto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var neo = NeoConnection.Instance;
-            neo.AddProduct(idProducto);
-            return Ok(idProducto);
-        }
-
-        [Route("api/Producto/Registrar/Vista")]
-        public IHttpActionResult RegistrarVista(int idUsuario, int idProducto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var neo = NeoConnection.Instance;
-            neo.AddView(idUsuario, idProducto);
-            return Ok("orkas");
-        }
-
         [Route("api/Producto/Registrar/Compra")]
         public IHttpActionResult RegistrarCompra(int idUsuario, int idProducto)
         {
@@ -103,7 +66,7 @@ namespace Gran_Torismo_API.Controllers
             if (idFollower != idFollowed)
             {
                 var neo = NeoConnection.Instance;
-                neo.addFollowing(idFollower, idFollowed);
+                neo.AddFollowing(idFollower, idFollowed);
                 return Ok(1);
             }
             return Ok(0);
@@ -116,7 +79,7 @@ namespace Gran_Torismo_API.Controllers
             if (idFollower != idFollowed)
             {
                 var neo = NeoConnection.Instance;
-                neo.removeFollowing(idFollower, idFollowed);
+                neo.RemoveFollowing(idFollower, idFollowed);
                 return Ok(1);
             }
             return Ok(0);

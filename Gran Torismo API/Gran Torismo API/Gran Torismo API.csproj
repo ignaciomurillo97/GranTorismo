@@ -209,6 +209,12 @@
     <Compile Include="Models\Categories.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClientDetails.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginModels.cs" />
     <Compile Include="Models\NeoConnection.cs" />
     <Compile Include="Models\PR_GetUser_Result.cs">
