@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="GranTorismoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="IdCategory" />
+          </Key>
+          <Property Name="IdCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Categories">
@@ -23,7 +30,6 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <PropertyRef Name="Username" />
             <PropertyRef Name="FirstName" />
             <PropertyRef Name="LastName" />
-            <PropertyRef Name="AccountNumber" />
           </Key>
           <Property Name="IdCard" Type="numeric" Precision="20" Scale="0" Nullable="false" />
           <Property Name="Username" Type="varchar" MaxLength="25" Nullable="false" />
@@ -31,7 +37,7 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="MiddleName" Type="varchar" MaxLength="50" />
           <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="SecondLastName" Type="varchar" MaxLength="50" />
-          <Property Name="AccountNumber" Type="numeric" Precision="20" Scale="0" Nullable="false" />
+          <Property Name="AccountNumber" Type="numeric" Precision="20" Scale="0" />
         </EntityType>
         <Function Name="PR_ClientLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="nvarchar" Mode="In" />
@@ -50,10 +56,44 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="AccountNumber" Type="numeric" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_CreateOwner" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="MiddleName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="PR_CreateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="MiddleName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+        </Function>
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
         </Function>
+        <Function Name="PR_UserLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
+        </Function>
+        <Function Name="PR_UsersLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
+          <Parameter Name="Rol" Type="varchar" Mode="InOut" />
+        </Function>
         <EntityContainer Name="GranTorismoModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Categories].[IdCategory] AS [IdCategory], 
@@ -76,7 +116,14 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="GranTorismoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="SQLEntities" annotation:LazyLoadingEnabled="true" >
+        <EntityContainer Name="SQLEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="GranTorismoModel.Categories" />
+          <FunctionImport Name="PR_ClientLogin">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
+          </FunctionImport>
           <FunctionImport Name="PR_CreateClient">
             <Parameter Name="IdCard" Mode="In" Type="Decimal" />
             <Parameter Name="Username" Mode="In" Type="String" />
@@ -88,18 +135,59 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <Parameter Name="AccountNumber" Mode="In" Type="Decimal" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="PR_ClientLogin">
+          <FunctionImport Name="PR_UsersLogin">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
+            <Parameter Name="Rol" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_CreateOwner">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="MiddleName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="SecondLastName" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GetUser" ReturnType="Collection(GranTorismoModel.PR_GetUser_Result)">
+          <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <EntitySet Name="Category" EntityType="GranTorismoModel.Category" />
+          <EntitySet Name="ClientDetails" EntityType="GranTorismoModel.ClientDetails" />
+          <FunctionImport Name="PR_ClientLogin1">
             <Parameter Name="Username" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
           </FunctionImport>
-          <FunctionImport Name="PR_GetUser" ReturnType="Collection(GranTorismoModel.PR_GetUser_Result)">
-          <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+          <FunctionImport Name="PR_CreateUser">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="MiddleName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="SecondLastName" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
           </FunctionImport>
-          <EntitySet Name="Categories" EntityType="GranTorismoModel.Categories" />
-          <EntitySet Name="ClientDetails" EntityType="GranTorismoModel.ClientDetails" />
+          <FunctionImport Name="PR_UserLogin">
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
+          </FunctionImport>
         </EntityContainer>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="IdCategory" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="IdCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <ComplexType Name="PR_GetUser_Result">
           <Property Type="Decimal" Name="IdCard" Nullable="false" Precision="20" Scale="0" />
           <Property Type="String" Name="Username" Nullable="false" MaxLength="25" />
@@ -107,12 +195,11 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Type="String" Name="MiddleName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="AccountNumber" Nullable="false" Precision="20" Scale="0" />
+          <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
         </ComplexType>
-        <EntityType Name="Categories">
+        <EntityType Name="Category">
           <Key>
             <PropertyRef Name="IdCategory" />
-            <PropertyRef Name="Name" />
           </Key>
           <Property Name="IdCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -123,7 +210,6 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <PropertyRef Name="Username" />
             <PropertyRef Name="FirstName" />
             <PropertyRef Name="LastName" />
-            <PropertyRef Name="AccountNumber" />
           </Key>
           <Property Name="IdCard" Type="Decimal" Nullable="false" Precision="20" Scale="0" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
@@ -131,16 +217,25 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SecondLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AccountNumber" Type="Decimal" Nullable="false" Precision="20" Scale="0" />
+          <Property Name="AccountNumber" Type="Decimal" Precision="20" Scale="0" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="GranTorismoModelStoreContainer" CdmEntityContainer="SQLEntities" >
+        <EntityContainerMapping StorageEntityContainer="GranTorismoModelStoreContainer" CdmEntityContainer="SQLEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="GranTorismoModel.Categories">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PR_CreateClient" FunctionName="GranTorismoModel.Store.PR_CreateClient" />
-          <FunctionImportMapping FunctionImportName="PR_ClientLogin" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
+          <FunctionImportMapping FunctionImportName="PR_UsersLogin" FunctionName="GranTorismoModel.Store.PR_UsersLogin" />
+          <FunctionImportMapping FunctionImportName="PR_CreateOwner" FunctionName="GranTorismoModel.Store.PR_CreateOwner" />
           <FunctionImportMapping FunctionImportName="PR_GetUser" FunctionName="GranTorismoModel.Store.PR_GetUser">
             <ResultMapping>
               <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetUser_Result">
@@ -154,9 +249,9 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="GranTorismoModel.Categories">
-              <MappingFragment StoreEntitySet="Categories">
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="GranTorismoModel.Category">
+              <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
               </MappingFragment>
@@ -175,6 +270,9 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PR_ClientLogin1" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
+          <FunctionImportMapping FunctionImportName="PR_CreateUser" FunctionName="GranTorismoModel.Store.PR_CreateUser" />
+          <FunctionImportMapping FunctionImportName="PR_UserLogin" FunctionName="GranTorismoModel.Store.PR_UserLogin" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -189,7 +287,7 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
