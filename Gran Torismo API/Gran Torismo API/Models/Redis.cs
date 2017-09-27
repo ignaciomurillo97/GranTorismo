@@ -1,4 +1,6 @@
-﻿using StackExchange.Redis;
+﻿using Gran_Torismo_API.RedisHelper;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +12,29 @@ namespace RedisConnect
     {
         static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
 
-        public static void AddToCart(int userId, int productId)
+        public static void AddToCart(int userId, int establishmentId, int productId)
         {
             IDatabase db = redis.GetDatabase();
-            db.ListLeftPush(cartKey(userId), productId);
+            db.ListLeftPush(cartKey(userId), serializeItem(establishmentId, productId));
         }
 
-        public static List<int> GetCart(int userId)
+        public static List<RedisItem> GetCart(int userId)
         {
             IDatabase db = redis.GetDatabase();
             List<RedisValue> result = db.ListRange(cartKey(userId), 0, -1).ToList();
-            List<int> cart = new List<int>();
+            List<RedisItem> cart = new List<RedisItem>();
             foreach (RedisValue r in result)
             {
-                cart.Add((int)r);
+                RedisItem item = deserializeItem(r);
+                cart.Add(item);
             }
             return cart;
         }
 
-        public static void DeleteFromCart(int userId, int productId)
+        public static void DeleteFromCart(int userId, int establishmentId, int productId)
         {
             IDatabase db = redis.GetDatabase();
-            db.ListRemove(cartKey(userId), productId, 1);
+            db.ListRemove(cartKey(userId), serializeItem(establishmentId, productId), 1);
         }
 
         private static string cartKey(int userId)
@@ -39,5 +42,17 @@ namespace RedisConnect
             return userId.ToString() + "_cart";
         }
 
+        private static string serializeItem(int establishmentId, int productId)
+        {
+            var item = new RedisItem(establishmentId, productId);
+            string json = JsonConvert.SerializeObject(item);
+            return json;
+        }
+
+        private static RedisItem deserializeItem(string json)
+        {
+            RedisItem item = JsonConvert.DeserializeObject<RedisItem>(json);
+            return item;
+        }
     }
 }

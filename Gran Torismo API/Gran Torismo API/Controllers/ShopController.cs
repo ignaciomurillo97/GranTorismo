@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using RedisConnect;
 using NeoConnect;
+using Gran_Torismo_API.RedisHelper;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -24,20 +25,20 @@ namespace Gran_Torismo_API.Controllers
         }
 
         // Agrega item al carrito del usuario
-        [Route("api/Cart/{userId}/{productId}")]
+        [Route("api/Cart/{userId}/{establishmentId}/{productId}")]
         [HttpPost]
-        public IHttpActionResult AddCart(int userId, int productId)
+        public IHttpActionResult AddCart(int userId, int establishmentId, int productId)
         {
-            Redis.AddToCart(userId, productId);
+            Redis.AddToCart(userId, establishmentId, productId);
             return Ok(1);
         }
 
         // Borra item del carrito del usuario
-        [Route("api/Cart/{userId}/{productId}")]
+        [Route("api/Cart/{userId}/{establishmentId}/{productId}")]
         [HttpDelete]
-        public IHttpActionResult DeleteItem(int userId, int productId)
+        public IHttpActionResult DeleteItem(int userId, int establishmentId, int productId)
         {
-            Redis.DeleteFromCart(userId, productId);
+            Redis.DeleteFromCart(userId, establishmentId, productId);
             return Ok(1);
         }
 
@@ -47,7 +48,7 @@ namespace Gran_Torismo_API.Controllers
         [HttpGet]
         public IHttpActionResult GetCart(int userId)
         {
-            List<int> cart = Redis.GetCart(userId);
+            List<RedisItem> cart = Redis.GetCart(userId);
             return Ok(cart);
         }
 
@@ -91,6 +92,15 @@ namespace Gran_Torismo_API.Controllers
             // TODO agregar logica de compra
             var neo = NeoConnection.Instance;
             neo.AddPurchase(userId, productId);
+            return Ok(1);
+        }
+
+        // Devuelve todos los productos
+        [Route("api/Product/")]
+        [HttpGet]
+        public IHttpActionResult GetProducts(int userId, int productId)
+        {
+            //TODO devolver los productos de mongo
             return Ok(1);
         }
     }
