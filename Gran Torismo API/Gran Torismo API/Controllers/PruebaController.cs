@@ -9,6 +9,7 @@ using Gran_Torismo_API.Models;
 using Gran_Torismo_API.NeoHelper;
 using NeoConnect;
 using RedisConnect;
+using MongoConnect;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -111,6 +112,13 @@ namespace Gran_Torismo_API.Controllers
             return Ok(res);
         }
         
+        [Route("api/Caca")]
+        [HttpGet]
+        public IHttpActionResult PruebaMongo()
+        {
+            MongoConnection caca = new MongoConnection();
+            return Ok(caca.getPersonas());
+        }
 
     }
 }

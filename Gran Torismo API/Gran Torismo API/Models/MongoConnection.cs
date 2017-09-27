@@ -5,14 +5,16 @@ using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Gran_Torismo_API.Models;
+using System.Web.Http;
+using System.Web.Http.Description;
 
-namespace Gran_Torismo_API
+namespace MongoConnect
 {
     public class MongoConnection
     {
-        MongoDatabase mongoDb;
-        MongoServer mongoServer;
+
         MongoClient mongoClient;
+        IMongoDatabase mongoDb;
 
         public MongoConnection()
         {
@@ -20,8 +22,7 @@ namespace Gran_Torismo_API
             try
             {
                 mongoClient = new MongoClient("mongodb://localhost:27017");
-                mongoServer = mongoClient.GetServer();
-                mongoDb = mongoServer.GetDatabase("Gran Torismo");
+                mongoDb = mongoClient.GetDatabase("Gran_Torismo");
                 //var mongoDb = mongoClient.GetDatabase("Gran Torismo");
             }
             catch (Exception e)
@@ -30,9 +31,9 @@ namespace Gran_Torismo_API
             }
         }
 
-        public List<Establecimientos> getPersonas()
+        public string getPersonas()
         {
-            List<Establecimientos> listaEst = mongoDb.GetCollection<Establecimientos>("Establecimientos").FindAll().ToList();
+            string listaEst = mongoDb.GetCollection<string>("Establecimientos").Find("Nombre").ToString();
             return listaEst;
         }
     }
