@@ -1,0 +1,24 @@
+--- Crea la base de datos Gran_Torismo y la coleccion Establecimientos
+--- Inserta un documento de prueba con la definicion del documento establecida
+
+use Gran_Torismo
+db.createCollection("Establecimientos")
+db.Establecimientos.insert({
+    "idDistrito" : 12345,
+    "Servicios" : {
+        "ID" : 12345,
+        "Nombre" : "ServicioPrueba",
+        "Descuento" : "5%",
+        "Precio" : 420.0,
+        "Foto" : {
+            "Foto" : "FotoServicio1",
+            "Foto" : "FotoServicio2"
+        }
+    },
+    "Fotos" : {
+        "Foto" : "Foto1",
+        "Foto" : "Foto2"
+    },
+    "Latitud" : "EstaLatitud",
+    "Longitud" : "EstaLongitud"
+})
