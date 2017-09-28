@@ -23,7 +23,6 @@ namespace MongoConnect
             {
                 mongoClient = new MongoClient("mongodb://localhost:27017");
                 mongoDb = mongoClient.GetDatabase("Gran_Torismo");
-                //var mongoDb = mongoClient.GetDatabase("Gran Torismo");
             }
             catch (Exception e)
             {

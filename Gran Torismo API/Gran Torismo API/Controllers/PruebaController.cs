@@ -10,6 +10,9 @@ using Gran_Torismo_API.NeoHelper;
 using NeoConnect;
 using RedisConnect;
 using MongoConnect;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Bson.IO;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -86,9 +89,9 @@ namespace Gran_Torismo_API.Controllers
             return Ok(0);
         }
 
-        [Route ("api/Producto/RecomendationsByViews")]
+        [Route("api/Producto/RecomendationsByViews")]
         [HttpPost]
-        public IHttpActionResult GetRecomendationsByView (int idUsuario)
+        public IHttpActionResult GetRecomendationsByView(int idUsuario)
         {
             if (!ModelState.IsValid)
             {
@@ -111,14 +114,22 @@ namespace Gran_Torismo_API.Controllers
             List<NeoProduct> res = neo.GetRecomendationsByCurrentView(idProducto, idUsuario);
             return Ok(res);
         }
-        
+
         [Route("api/Caca")]
         [HttpGet]
         public IHttpActionResult PruebaMongo()
         {
-            MongoConnection caca = new MongoConnection();
-            return Ok(caca.getPersonas());
-        }
+            var client = new MongoClient();
 
+            // Access database named 'test'
+            var database = client.GetDatabase("Gran_Torismo");
+
+            // Access collection named 'restaurants'
+            var collection = database.GetCollection<Establecimientos>("Establecimientos");
+            // 3. Query
+            var filter = Builders<Establecimientos>.Filter.Empty;
+            var result = collection.Find(filter).ToList();
+            return Ok(result);
+        }
     }
 }

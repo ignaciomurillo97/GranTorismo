@@ -214,7 +214,7 @@
     <Compile Include="Classes\RedisItem.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Models\MongoConnection.cs" />
+    <Compile Include="Server\MongoConnection.cs" />
     <Compile Include="Controllers\PruebaController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
@@ -231,11 +231,11 @@
     </Compile>
     <Compile Include="Models\Establecimientos.cs" />
     <Compile Include="Models\LoginModels.cs" />
-    <Compile Include="Models\NeoConnection.cs" />
+    <Compile Include="Server\NeoConnection.cs" />
     <Compile Include="Models\PR_GetUser_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Redis.cs" />
+    <Compile Include="Server\Redis.cs" />
     <Compile Include="Models\SQLModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

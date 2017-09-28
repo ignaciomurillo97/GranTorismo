@@ -9,27 +9,42 @@ namespace Gran_Torismo_API.Models
 {
         public class Establecimientos
         {
+
+            private IEnumerable<ServiciosModel> _addresses;
             public ObjectId _id { get; set; }
 
-            [BsonElement("Nombre del establecimiento")]
-            public string Nombre { get; set; }
+            [BsonElement("idDistrito")]
+            public double Distrito { get; set; }
 
-            [BsonElement("Pueblo")]
-            public string Pueblo { get; set; }
-
-            [BsonElement("Distrito")]
-            public string Distrito { get; set; }
-
-            [BsonElement("Canton")]
-            public string Canton { get; set; }
-
-            [BsonElement("Provincia")]
-            public string Provincia { get; set; }
-
-            [BsonElement("Descripcion")]
-            public string Descripcion { get; set; }
+            [BsonIgnoreIfNull]
+            public ServiciosModel Servicios { get; set; }
 
             [BsonElement("Fotos")]
-            public string Fotos { get; set; }
+            public BsonDocument fotos { get; set; }
+
+            [BsonElement("Latitud")]
+            public string latitud { get; set; }
+
+            [BsonElement("Longitud")]
+            public string longitud { get; set; }
+    }
+
+    public class ServiciosModel
+    {
+
+        [BsonElement("ID")]
+        public double ID { get; set; }
+
+        [BsonElement("Nombre")]
+        public string nombre { get; set; }
+
+        [BsonElement("Descuento")]
+        public string Descuento { get; set; }
+
+        [BsonElement("Precio")]
+        public double Precio { get; set; }
+
+        [BsonElement("Foto")]
+        public BsonDocument Fotos { get; set; }
     }
 }
