@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
+
 using Gran_Torismo_API.Models;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.IO;
 
 namespace MongoConnect
 {
@@ -15,8 +17,21 @@ namespace MongoConnect
 
         MongoClient mongoClient;
         IMongoDatabase mongoDb;
+        private static MongoConnection instance;
 
-        public MongoConnection()
+        public static MongoConnection Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new MongoConnection();
+                }
+                return instance;
+            }
+        }
+        
+        private MongoConnection()
         {
 
             try
@@ -30,10 +45,45 @@ namespace MongoConnect
             }
         }
 
-        public string getPersonas()
+        public Establecimientos getEstablecimiento(int idEstablishment)
         {
-            string listaEst = mongoDb.GetCollection<string>("Establecimientos").Find("Nombre").ToString();
-            return listaEst;
+            var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
+            var filter = Builders<Establecimientos>.Filter.Eq("idEstablishment" , idEstablishment);
+            Establecimientos result;
+            try {
+                result = collection.Find(filter).Single();
+            }catch (InvalidOperationException e)
+            {
+                result = null;
+            }
+            return result;
         }
+
+        public ServiciosModel getServicio(int idService , int idEstablishment)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService) & Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
+            ServiciosModel result;
+            try
+            {
+                result = collection.Find(filter).Single();
+            }
+            catch (InvalidOperationException e) {
+                result = null;
+            }
+            return result;
+            
+        }
+
+        public List<ServiciosModel> getServicios(int idEstablishment)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
+            List<ServiciosModel> result;
+            result = collection.Find(filter).ToList();
+            return result;
+
+        }
+
     }
 }

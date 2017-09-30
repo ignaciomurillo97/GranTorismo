@@ -131,5 +131,16 @@ namespace Gran_Torismo_API.Controllers
             var result = collection.Find(filter).ToList();
             return Ok(result);
         }
+
+        [Route("api/Caca2/{estId}")]
+        [HttpGet]
+        public IHttpActionResult PruebaMongo2(int estId)
+        {
+            var client = MongoConnection.Instance;
+            var result = client.getServicios(estId);
+            return Ok(result);
+
+        }
+
     }
 }

@@ -1,24 +1,42 @@
 --- Crea la base de datos Gran_Torismo y la coleccion Establecimientos
 --- Inserta un documento de prueba con la definicion del documento establecida
 
-use Gran_Torismo
+use Gran_Torismo2
 db.createCollection("Establecimientos")
+db.createCollection("Servicios")
+
 db.Establecimientos.insert({
-    "idDistrito" : 12345,
-    "Servicios" : {
-        "ID" : 12345,
-        "Nombre" : "ServicioPrueba",
-        "Descuento" : "5%",
-        "Precio" : 420.0,
-        "Foto" : {
-            "Foto" : "FotoServicio1",
-            "Foto" : "FotoServicio2"
-        }
-    },
-    "Fotos" : {
-        "Foto" : "Foto1",
-        "Foto" : "Foto2"
-    },
-    "Latitud" : "EstaLatitud",
-    "Longitud" : "EstaLongitud"
+    "nombre" : "C",
+    "descripcion" : "Que rico",
+    "idDistrito" : 1.0,
+    "latitud" : -73.9667,
+    "longitud" : 40.78,
+    "fotos" : [ 
+        "C:/E/Caca.png", 
+        "C:/E/caquita.420"
+    ]
 })
+
+db.Servicios.insert({
+    "nombre" : "Paseito",
+    "_idEstablecimiento" : ObjectId("59ce8a10541dc8054f9102c1"),
+    "descripcion" : "Paseito bien crispeta",
+    "precio" : 420.0,
+    "fotos" : [ 
+        "C:/Paseo.png", 
+        "C:/Yea.boi"
+    ]
+})
+
+db.Servicios.insert({
+    "_id" : ObjectId("59ceeb831ba99c70b1d1fe08"),
+    "nombre" : "Paseo crispetas",
+    "_idEstablecimiento" : ObjectId("59cee9d0b17b19fc54d8b90d"),
+    "descripcion" : "Paseito MUY crispeta",
+    "precio" : 420.0,
+    "fotos" : [ 
+        "C:/Paseo.png", 
+        "C:/Yea.boi"
+    ]
+})
+
