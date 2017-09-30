@@ -9,6 +9,7 @@ using System.Web.Http.Description;
 using RedisConnect;
 using NeoConnect;
 using Gran_Torismo_API.RedisHelper;
+using MongoConnect;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -48,8 +49,14 @@ namespace Gran_Torismo_API.Controllers
         [HttpGet]
         public IHttpActionResult GetCart(int userId)
         {
+            var mongoConnection = MongoConnection.Instance;
             List<RedisItem> cart = Redis.GetCart(userId);
-            return Ok(cart);
+            List<ServiciosModel> services = new List<ServiciosModel>();
+            foreach (RedisItem r in cart)
+            {
+                services.Add(mongoConnection.getServicio(r.serviceId, r.establishmentId));
+            }
+            return Ok(services);
         }
 
         // Agrega producto a las BD

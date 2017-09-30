@@ -12,10 +12,10 @@ namespace RedisConnect
     {
         static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
 
-        public static void AddToCart(int userId, int establishmentId, int productId)
+        public static void AddToCart(int userId, int establishmentId, int serviceId)
         {
             IDatabase db = redis.GetDatabase();
-            db.ListLeftPush(cartKey(userId), serializeItem(establishmentId, productId));
+            db.ListLeftPush(cartKey(userId), serializeItem(establishmentId, serviceId));
         }
 
         public static List<RedisItem> GetCart(int userId)
@@ -31,10 +31,10 @@ namespace RedisConnect
             return cart;
         }
 
-        public static void DeleteFromCart(int userId, int establishmentId, int productId)
+        public static void DeleteFromCart(int userId, int establishmentId, int serviceId)
         {
             IDatabase db = redis.GetDatabase();
-            db.ListRemove(cartKey(userId), serializeItem(establishmentId, productId), 1);
+            db.ListRemove(cartKey(userId), serializeItem(establishmentId, serviceId), 1);
         }
 
         private static string cartKey(int userId)
@@ -42,9 +42,9 @@ namespace RedisConnect
             return userId.ToString() + "_cart";
         }
 
-        private static string serializeItem(int establishmentId, int productId)
+        private static string serializeItem(int establishmentId, int serviceId)
         {
-            var item = new RedisItem(establishmentId, productId);
+            var item = new RedisItem(establishmentId, serviceId);
             string json = JsonConvert.SerializeObject(item);
             return json;
         }

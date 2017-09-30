@@ -7,12 +7,12 @@ namespace Gran_Torismo_API.RedisHelper
 {
     public class RedisItem
     {
-        public int productId { get; set; }
+        public int serviceId { get; set; }
         public int establishmentId { get; set; }
 
-        public RedisItem(int establishmentId, int productId)
+        public RedisItem(int establishmentId, int serviceId)
         {
-            this.productId = productId;
+            this.serviceId = serviceId;
             this.establishmentId = establishmentId;
         }
     }
