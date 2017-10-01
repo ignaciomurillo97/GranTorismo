@@ -133,3 +133,63 @@ CREATE PROCEDURE [PR_GetUser](
 	SELECT * FROM [ClientDetails] WHERE IdCard = @IdCard
 END
 GO
+
+CREATE PROCEDURE [PR_EditCategory](
+	@Name VARCHAR(MAX),
+	@Id INT
+)AS BEGIN
+	UPDATE Category SET [Name] = @Name WHERE IdCategory = @Id
+END
+GO
+
+CREATE PROCEDURE [PR_CreateCategory] (
+	@Name VARCHAR(MAX)
+)AS BEGIN
+	INSERT INTO [Category] VALUES(@Name)
+END
+GO
+
+
+CREATE PROCEDURE [PR_DeleteCategory] (
+	@Id INT
+)AS BEGIN
+	DELETE [Category] WHERE IdCategory = @Id
+END
+GO
+
+exec [PR_GetAdmins]
+
+CREATE PROCEDURE [PR_DeleteAdmin](
+	@id INT 
+) 
+AS BEGIN
+	DELETE [Admin] WHERE IdCard = @id
+	DELETE [User] WHERE IdCard = @id
+END
+GO
+
+CREATE PROCEDURE [PR_CreateAdmin] (
+	@IdCard NUMERIC(20),
+	@Username VARCHAR(25),
+    @Password VARCHAR(255),
+    @FirstName VARCHAR(50),
+    @MiddleName VARCHAR(50) = NULL,
+    @LastName VARCHAR(50),
+    @SecondLastName VARCHAR(50) = NULL,
+	@responseMessage NVARCHAR(250) OUTPUT
+) AS BEGIN
+	EXEC PR_CreateUser @IdCard, @Username, @Password, @FirstName, @MiddleName, @LastName, @SecondLastName, @responseMessage OUTPUT
+	IF @responseMessage = 'Success'
+	BEGIN
+		BEGIN TRY
+			INSERT INTO [Admin](IdCard) VALUES (@IdCard)
+		SET @responseMessage = 'Success'
+		END TRY
+		BEGIN CATCH
+			SET @responseMessage = ERROR_MESSAGE() 
+		END CATCH
+	END
+END
+GO
+
+

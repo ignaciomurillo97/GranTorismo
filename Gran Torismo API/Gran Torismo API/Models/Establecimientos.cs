@@ -10,39 +10,41 @@ namespace Gran_Torismo_API.Models
         public class Establecimientos
         {
 
+            private IEnumerable<ServiciosModel> _addresses;
             public ObjectId _id { get; set; }
-            public int idEstablishment { get; set; }
-            public string nombre { get; set; }
-            public string descripcion { get; set; }
-            public double idDistrito { get; set; }
-            public double latitud { get; set; }
-            public double longitud { get; set; }
-            public BsonArray fotos { get; set; }
 
+            [BsonElement("idDistrito")]
+            public double Distrito { get; set; }
+
+            [BsonIgnoreIfNull]
+            public ServiciosModel Servicios { get; set; }
+
+            [BsonElement("Fotos")]
+            public BsonDocument fotos { get; set; }
+
+            [BsonElement("Latitud")]
+            public string latitud { get; set; }
+
+            [BsonElement("Longitud")]
+            public string longitud { get; set; }
     }
 
     public class ServiciosModel
     {
 
-        [BsonElement("_id")]
-        public ObjectId _id { get; set; }
+        [BsonElement("ID")]
+        public double ID { get; set; }
 
-        [BsonElement("idService")]
-        public int idService { get; set; }
-
-        [BsonElement("idEstablishment")]
-        public int idEstablishment { get; set; }
-
-        [BsonElement("nombre")]
+        [BsonElement("Nombre")]
         public string nombre { get; set; }
 
-        [BsonElement("descripcion")]
-        public string descripcion { get; set; }
+        [BsonElement("Descuento")]
+        public string Descuento { get; set; }
 
-        [BsonElement("precio")]
-        public double precio { get; set; }
+        [BsonElement("Precio")]
+        public double Precio { get; set; }
 
-        [BsonElement("fotos")]
-        public BsonArray fotos { get; set; }
+        [BsonElement("Foto")]
+        public BsonDocument Fotos { get; set; }
     }
 }

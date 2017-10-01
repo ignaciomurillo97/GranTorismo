@@ -13,6 +13,22 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'GranTorismo.dbo.AdminDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AdminDetails">
+          <Key>
+            <PropertyRef Name="IdCard" />
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+          </Key>
+          <Property Name="IdCard" Type="numeric" Precision="20" Scale="0" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SecondLastName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'GranTorismo.dbo.Categories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Categories">
           <Key>
@@ -45,6 +61,19 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
           <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
         </Function>
+        <Function Name="PR_CreateAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="MiddleName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="PR_CreateCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="PR_CreateClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -76,6 +105,16 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_DeleteAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PR_DeleteCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PR_EditCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
         </Function>
@@ -94,6 +133,16 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
         </Function>
         <EntityContainer Name="GranTorismoModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdminDetails" EntityType="Self.AdminDetails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AdminDetails].[IdCard] AS [IdCard], 
+    [AdminDetails].[Username] AS [Username], 
+    [AdminDetails].[FirstName] AS [FirstName], 
+    [AdminDetails].[MiddleName] AS [MiddleName], 
+    [AdminDetails].[LastName] AS [LastName], 
+    [AdminDetails].[SecondLastName] AS [SecondLastName]
+    FROM [dbo].[AdminDetails] AS [AdminDetails]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Categories" EntityType="Self.Categories" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Categories].[IdCategory] AS [IdCategory], 
@@ -179,6 +228,30 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
           </FunctionImport>
+          <FunctionImport Name="PR_EditCategory">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PR_CreateCategory">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_DeleteCategory">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PR_CreateAdmin">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="MiddleName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="SecondLastName" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_DeleteAdmin">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="AdminDetails" EntityType="GranTorismoModel.AdminDetails" />
         </EntityContainer>
         <EntityType Name="Categories">
           <Key>
@@ -218,6 +291,20 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SecondLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AccountNumber" Type="Decimal" Precision="20" Scale="0" />
+        </EntityType>
+        <EntityType Name="AdminDetails">
+          <Key>
+            <PropertyRef Name="IdCard" />
+            <PropertyRef Name="Username" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+          </Key>
+          <Property Name="IdCard" Type="Decimal" Nullable="false" Precision="20" Scale="0" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SecondLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -273,6 +360,23 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <FunctionImportMapping FunctionImportName="PR_ClientLogin1" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
           <FunctionImportMapping FunctionImportName="PR_CreateUser" FunctionName="GranTorismoModel.Store.PR_CreateUser" />
           <FunctionImportMapping FunctionImportName="PR_UserLogin" FunctionName="GranTorismoModel.Store.PR_UserLogin" />
+          <FunctionImportMapping FunctionImportName="PR_EditCategory" FunctionName="GranTorismoModel.Store.PR_EditCategory" />
+          <FunctionImportMapping FunctionImportName="PR_CreateCategory" FunctionName="GranTorismoModel.Store.PR_CreateCategory" />
+          <FunctionImportMapping FunctionImportName="PR_DeleteCategory" FunctionName="GranTorismoModel.Store.PR_DeleteCategory" />
+          <FunctionImportMapping FunctionImportName="PR_CreateAdmin" FunctionName="GranTorismoModel.Store.PR_CreateAdmin" />
+          <FunctionImportMapping FunctionImportName="PR_DeleteAdmin" FunctionName="GranTorismoModel.Store.PR_DeleteAdmin" />
+          <EntitySetMapping Name="AdminDetails">
+            <EntityTypeMapping TypeName="GranTorismoModel.AdminDetails">
+              <MappingFragment StoreEntitySet="AdminDetails">
+                <ScalarProperty Name="SecondLastName" ColumnName="SecondLastName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

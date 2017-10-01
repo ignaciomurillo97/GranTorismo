@@ -212,8 +212,12 @@
     <Compile Include="Classes\NeoProduct.cs" />
     <Compile Include="Classes\NeoUser.cs" />
     <Compile Include="Classes\RedisItem.cs" />
+    <Compile Include="Controllers\SenpaiController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\AdminDetails.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Server\MongoConnection.cs" />
     <Compile Include="Controllers\PruebaController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
