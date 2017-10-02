@@ -150,7 +150,7 @@ alter PROCEDURE [PR_GetUserByUsername](
 END
 GO
 
-CREATE PROCEDURE [PR_CreateLocal]
+CREATE PROCEDURE [PR_CreateService]
 AS BEGIN
 	INSERT INTO [Service] ([State], [CreationDate])
 		VALUES (1, GETDATE()
@@ -253,5 +253,20 @@ CREATE PROCEDURE [PR_Unfollow](
 )AS BEGIN
 	DELETE FROM [Follower]
 	WHERE IdCard = @IdCard AND IdFriend = @IdFriend
+END
+GO
+
+
+
+CREATE PROCEDURE [PR_GetDistricts]
+AS BEGIN
+
+SELECT 
+	IdDistrict AS [IdDistrict],
+	CONCAT(P.Name, ' - ', C.Name, ' - ', D.Name) AS [Name]
+FROM [Province] P
+	INNER JOIN [Canton] C ON C.IdProvince = P.IdProvince
+	INNER JOIN [District] D ON D.IdCanton = C.IdCanton
+
 END
 GO

@@ -216,10 +216,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JhordanController.cs" />
     <Compile Include="Models\CommonClass.cs" />
-    <Compile Include="Models\PR_GetDistricts_Result.cs">
+    <Compile Include="Models\PR_GetClient_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PR_GetClient_Result.cs">
+    <Compile Include="Models\PR_GetDistricts_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PR_GetFollowers_Result.cs">

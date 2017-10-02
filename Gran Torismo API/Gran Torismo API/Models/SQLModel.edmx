@@ -81,9 +81,29 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_Follow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="IdFriend" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PR_GetClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="PR_GetDistricts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PR_GetFollowers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PR_GetFollowing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PR_GetUserByUsername" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PR_Unfollow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="IdFriend" Type="numeric" Mode="In" />
         </Function>
         <Function Name="PR_UserLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="nvarchar" Mode="In" />
@@ -197,6 +217,26 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <Parameter Name="SecondLastName" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="PR_Follow">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="IdFriend" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GetFollowers" ReturnType="Collection(GranTorismoModel.PR_GetFollowers_Result)">
+          <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GetFollowing" ReturnType="Collection(GranTorismoModel.PR_GetFollowing_Result)">
+          <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PR_Unfollow">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="IdFriend" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GetClient" ReturnType="Collection(GranTorismoModel.PR_GetClient_Result)">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GetUserByUsername" ReturnType="Collection(Decimal)">
+            <Parameter Name="Username" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Categories">
           <Key>
@@ -240,6 +280,33 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
         <ComplexType Name="PR_GetDistricts_Result">
           <Property Type="Int32" Name="IdDistrict" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="156" />
+        </ComplexType>
+        <ComplexType Name="PR_GetFollowers_Result">
+          <Property Type="Decimal" Name="IdCard" Nullable="false" Precision="20" Scale="0" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MiddleName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="PR_GetFollowing_Result">
+          <Property Type="Decimal" Name="IdCard" Nullable="false" Precision="20" Scale="0" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MiddleName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="PR_GetClient_Result">
+          <Property Type="Decimal" Name="IdCard" Nullable="false" Precision="20" Scale="0" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MiddleName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -304,6 +371,48 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PR_CreateService" FunctionName="GranTorismoModel.Store.PR_CreateService" />
           <FunctionImportMapping FunctionImportName="PR_CreateAdmin" FunctionName="GranTorismoModel.Store.PR_CreateAdmin" />
+          <FunctionImportMapping FunctionImportName="PR_Follow" FunctionName="GranTorismoModel.Store.PR_Follow" />
+          <FunctionImportMapping FunctionImportName="PR_GetFollowers" FunctionName="GranTorismoModel.Store.PR_GetFollowers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetFollowers_Result">
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="SecondLastName" ColumnName="SecondLastName" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PR_GetFollowing" FunctionName="GranTorismoModel.Store.PR_GetFollowing">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetFollowing_Result">
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="SecondLastName" ColumnName="SecondLastName" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PR_Unfollow" FunctionName="GranTorismoModel.Store.PR_Unfollow" />
+          <FunctionImportMapping FunctionImportName="PR_GetClient" FunctionName="GranTorismoModel.Store.PR_GetClient">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetClient_Result">
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="SecondLastName" ColumnName="SecondLastName" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PR_GetUserByUsername" FunctionName="GranTorismoModel.Store.PR_GetUserByUsername" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

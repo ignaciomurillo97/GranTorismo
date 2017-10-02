@@ -60,6 +60,15 @@ namespace Gran_Torismo_API.Controllers
         }
 
         // Muestra los establecimientos
+        [Route("api/get/Establecimiento/{IdEstablecimiento}")]
+        [HttpGet]
+        public IHttpActionResult GetEstablecimientos(int IdEstablecimiento)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            return Ok(mongoConnection.getEstablecimiento(IdEstablecimiento));
+        }
+
+        // Muestra los establecimientos
         [Route("api/Establecimiento/Index/{IdOwner}")]
         [HttpGet]
         public IHttpActionResult GetEstablecimiento(int IdOwner)
@@ -104,10 +113,6 @@ namespace Gran_Torismo_API.Controllers
         {
             var idService = HttpContext.Current.Request.Form["idService"];
             BsonArray filesNames = MongoConnection.Instance.getServicio(Convert.ToInt32(idService)).fotos;
-            Console.WriteLine("----------------------------------------------------------");
-            Console.WriteLine(filesNames);
-            Debug.WriteLine("----------------------------------------------------------");
-            Debug.WriteLine(filesNames);
             string uploadFolder = HttpContext.Current.Server.MapPath("~/App_Data");
             MultipartFormDataStreamProvider streamProvider = new MultipartFormDataStreamProvider(uploadFolder);
             MultipartFileStreamProvider multipartFileStreamProvider = await Request.Content.ReadAsMultipartAsync(streamProvider);
