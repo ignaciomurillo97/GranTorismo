@@ -168,16 +168,14 @@ namespace NeoConnect
             return res;
         }
 
-        public List<NeoProduct> GetRecomendationsByCurrentView(int userId, int idProduct)
+        public List<int> GetRecomendationsByCurrentView(int idProduct)
         {
-            List<NeoProduct> res = graphClient.Cypher
-                .Match("(user1:user), (product1:product)<-[:viewed]-(user2:user)-[views:viewed]->(product2:product)")
-                .Where((NeoProduct producto1) => producto1.IdProduct == idProduct)
-                .AndWhere((NeoUser user1) => user1.IdCard == userId)
-                .AndWhere("not (user1)-[:viewed]->(product2)")
+            List<int> res = graphClient.Cypher
+                .Match("(user1:user), (product1:product)<-[:purchased]-(user2:user)-[views:purchased]->(product2:product)")
+                .Where((NeoProduct product1) => product1.IdProduct == idProduct)
                 .With("product2, count(views) as viewCount")
                 .OrderByDescending("viewCount")
-                .ReturnDistinct(product2 => product2.As<NeoProduct>())
+                .ReturnDistinct(product2 => product2.As<NeoProduct>().IdProduct)
                 .Results.ToList();
             return res;
         }

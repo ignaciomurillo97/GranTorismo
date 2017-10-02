@@ -8,7 +8,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using RedisConnect;
 using NeoConnect;
-using Gran_Torismo_API.RedisHelper;
 using MongoConnect;
 
 namespace Gran_Torismo_API.Controllers
@@ -26,20 +25,20 @@ namespace Gran_Torismo_API.Controllers
         }
 
         // Agrega item al carrito del usuario
-        [Route("api/Cart/{userId}/{establishmentId}/{productId}")]
+        [Route("api/Cart/{userId}/{productId}")]
         [HttpPost]
-        public IHttpActionResult AddCart(int userId, int establishmentId, int productId)
+        public IHttpActionResult AddCart(int userId, int productId)
         {
-            Redis.AddToCart(userId, establishmentId, productId);
+            Redis.AddToCart(userId, productId);
             return Ok(1);
         }
 
         // Borra item del carrito del usuario
-        [Route("api/Cart/{userId}/{establishmentId}/{productId}")]
+        [Route("api/Cart/{userId}/{productId}")]
         [HttpDelete]
-        public IHttpActionResult DeleteItem(int userId, int establishmentId, int productId)
+        public IHttpActionResult DeleteItem(int userId, int productId)
         {
-            Redis.DeleteFromCart(userId, establishmentId, productId);
+            Redis.DeleteFromCart(userId, productId);
             return Ok(1);
         }
 
@@ -50,11 +49,11 @@ namespace Gran_Torismo_API.Controllers
         public IHttpActionResult GetCart(int userId)
         {
             var mongoConnection = MongoConnection.Instance;
-            List<RedisItem> cart = Redis.GetCart(userId);
+            List<int> cart = Redis.GetCart(userId);
             List<ServiciosModel> services = new List<ServiciosModel>();
-            foreach (RedisItem r in cart)
+            foreach (int r in cart)
             {
-                services.Add(mongoConnection.getServicio(r.serviceId, r.establishmentId));
+                services.Add(mongoConnection.getServicio(r));
             }
             return Ok(services);
         }
@@ -109,6 +108,21 @@ namespace Gran_Torismo_API.Controllers
         {
             //TODO devolver los productos de mongo
             return Ok(1);
+        }
+
+        [Route("api/Product/Recomendations/View/{idProducto}")]
+        [HttpPost]
+        public IHttpActionResult GetRecomendationsByCurrentView(int idProducto)
+        {
+            var neo = NeoConnection.Instance;
+            var mongoConnection = MongoConnection.Instance;
+            List<int> res = neo.GetRecomendationsByCurrentView(idProducto);
+            List<ServiciosModel> services = new List<ServiciosModel>();
+            foreach (int r in res)
+            {
+                services.Add(mongoConnection.getServicio(r));
+            }
+            return Ok(services);
         }
     }
 }
