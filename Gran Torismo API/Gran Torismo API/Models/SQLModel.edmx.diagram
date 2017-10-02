@@ -8,6 +8,7 @@
         <EntityTypeShape EntityType="GranTorismoModel.Categories" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="GranTorismoModel.Category" Width="1.5" PointX="3.75" PointY="0.75" />
         <EntityTypeShape EntityType="GranTorismoModel.ClientDetails" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="GranTorismoModel.AdminDetails" Width="1.5" PointX="3.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

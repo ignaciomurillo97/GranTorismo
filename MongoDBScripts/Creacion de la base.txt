@@ -1,7 +1,7 @@
 --- Crea la base de datos Gran_Torismo , la coleccion Establecimientos y la coleccion Servicios
 --- Inserta documentos de prueba en Establecimientos y Servicios
 
-use Gran_Torismo2
+use Gran_Torismo
 db.createCollection("Establecimientos")
 db.createCollection("Servicios")
 

@@ -30,6 +30,7 @@ namespace Gran_Torismo_API.Models
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<ClientDetails> ClientDetails { get; set; }
+        public virtual DbSet<AdminDetails> AdminDetails { get; set; }
     
         public virtual int PR_ClientLogin(string username, string password, ObjectParameter responseMessage, ObjectParameter idCard)
         {
@@ -193,6 +194,79 @@ namespace Gran_Torismo_API.Models
                 new ObjectParameter("Password", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_UserLogin", usernameParameter, passwordParameter, responseMessage, idCard);
+        }
+    
+        public virtual int PR_EditCategory(string name, Nullable<int> id)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_EditCategory", nameParameter, idParameter);
+        }
+    
+        public virtual int PR_CreateCategory(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateCategory", nameParameter);
+        }
+    
+        public virtual int PR_DeleteCategory(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteCategory", idParameter);
+        }
+    
+        public virtual int PR_CreateAdmin(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, ObjectParameter responseMessage)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var firstNameParameter = firstName != null ?
+                new ObjectParameter("FirstName", firstName) :
+                new ObjectParameter("FirstName", typeof(string));
+    
+            var middleNameParameter = middleName != null ?
+                new ObjectParameter("MiddleName", middleName) :
+                new ObjectParameter("MiddleName", typeof(string));
+    
+            var lastNameParameter = lastName != null ?
+                new ObjectParameter("LastName", lastName) :
+                new ObjectParameter("LastName", typeof(string));
+    
+            var secondLastNameParameter = secondLastName != null ?
+                new ObjectParameter("SecondLastName", secondLastName) :
+                new ObjectParameter("SecondLastName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateAdmin", idCardParameter, usernameParameter, passwordParameter, firstNameParameter, middleNameParameter, lastNameParameter, secondLastNameParameter, responseMessage);
+        }
+    
+        public virtual int PR_DeleteAdmin(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteAdmin", idParameter);
         }
     }
 }

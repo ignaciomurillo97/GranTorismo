@@ -96,10 +96,26 @@ namespace MongoConnect
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
             var filter = Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
-            List<ServiciosModel> result;
-            result = collection.Find(filter).ToList();
+            List<ServiciosModel> result = collection.Find(filter).ToList();
             return result;
 
+        }
+
+        public List<ServiciosModel> getTodosServicios()
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Empty;
+            List<ServiciosModel> result = collection.Find(filter).ToList();
+            return result;
+
+        }
+
+        public List<Establecimientos> getTodosEstablecimientos()
+        {
+            var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
+            var filter = Builders<Establecimientos>.Filter.Empty;
+            List<Establecimientos> result = collection.Find(filter).ToList();
+            return result;
         }
 
     }

@@ -119,12 +119,12 @@ namespace Gran_Torismo_API.Controllers
             return Ok(result);
         }
 
-        [Route("api/Caca2/{estId}")]
+        [Route("api/Caca2")]
         [HttpGet]
-        public IHttpActionResult PruebaMongo2(int estId)
+        public IHttpActionResult PruebaMongo2()
         {
             var client = MongoConnection.Instance;
-            var result = client.getServicios(estId);
+            var result = client.getTodosServicios();
             return Ok(result);
 
         }

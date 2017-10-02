@@ -49,6 +49,21 @@ namespace Gran_Torismo_API.Controllers
             RegisterResponse response = new RegisterResponse() { Response = output.Value.ToString() };
             return Ok(response);
         }
+        [Route("api/Register/User/Admin")]
+        [ResponseType(typeof(Admin))]
+        public IHttpActionResult PostAdmin(Admin user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ObjectParameter output = new ObjectParameter("responseMessage", typeof(string));
+            db.PR_CreateAdmin(user.User.IdCard, user.User.Username, user.User.Password, user.User.FirstName, user.User.MiddleName, user.User.LastName,
+                user.User.SecondLastName, output);
+            RegisterResponse response = new RegisterResponse() { Response = output.Value.ToString() };
+            return Ok(response);
+        }
+
 
         // POST: api/Login
         [Route("api/Login/Authenticate")]
