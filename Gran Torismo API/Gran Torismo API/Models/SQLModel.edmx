@@ -39,6 +39,16 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="SecondLastName" Type="varchar" MaxLength="50" />
           <Property Name="AccountNumber" Type="numeric" Precision="20" Scale="0" />
         </EntityType>
+        <Function Name="PR_CreateAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCard" Type="numeric" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="FirstName" Type="varchar" Mode="In" />
+          <Parameter Name="MiddleName" Type="varchar" Mode="In" />
+          <Parameter Name="LastName" Type="varchar" Mode="In" />
+          <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
+          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+        </Function>
         <Function Name="PR_CreateClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -177,6 +187,16 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           </FunctionImport>
           <FunctionImport Name="PR_GetDistricts" ReturnType="Collection(GranTorismoModel.PR_GetDistricts_Result)" />
           <FunctionImport Name="PR_CreateService" ReturnType="Collection(Decimal)" />
+          <FunctionImport Name="PR_CreateAdmin">
+            <Parameter Name="IdCard" Mode="In" Type="Decimal" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="MiddleName" Mode="In" Type="String" />
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="SecondLastName" Mode="In" Type="String" />
+            <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Categories">
           <Key>
@@ -283,6 +303,7 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PR_CreateService" FunctionName="GranTorismoModel.Store.PR_CreateService" />
+          <FunctionImportMapping FunctionImportName="PR_CreateAdmin" FunctionName="GranTorismoModel.Store.PR_CreateAdmin" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -204,5 +204,38 @@ namespace Gran_Torismo_API.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("PR_CreateService");
         }
+    
+        public virtual int PR_CreateAdmin(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, ObjectParameter responseMessage)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var firstNameParameter = firstName != null ?
+                new ObjectParameter("FirstName", firstName) :
+                new ObjectParameter("FirstName", typeof(string));
+    
+            var middleNameParameter = middleName != null ?
+                new ObjectParameter("MiddleName", middleName) :
+                new ObjectParameter("MiddleName", typeof(string));
+    
+            var lastNameParameter = lastName != null ?
+                new ObjectParameter("LastName", lastName) :
+                new ObjectParameter("LastName", typeof(string));
+    
+            var secondLastNameParameter = secondLastName != null ?
+                new ObjectParameter("SecondLastName", secondLastName) :
+                new ObjectParameter("SecondLastName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateAdmin", idCardParameter, usernameParameter, passwordParameter, firstNameParameter, middleNameParameter, lastNameParameter, secondLastNameParameter, responseMessage);
+        }
     }
 }
