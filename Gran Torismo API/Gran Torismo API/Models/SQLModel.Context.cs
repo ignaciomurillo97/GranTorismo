@@ -137,19 +137,6 @@ namespace Gran_Torismo_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetUser_Result>("PR_GetUser", idCardParameter);
         }
     
-        public virtual int PR_ClientLogin1(string username, string password, ObjectParameter responseMessage, ObjectParameter idCard)
-        {
-            var usernameParameter = username != null ?
-                new ObjectParameter("Username", username) :
-                new ObjectParameter("Username", typeof(string));
-    
-            var passwordParameter = password != null ?
-                new ObjectParameter("Password", password) :
-                new ObjectParameter("Password", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_ClientLogin1", usernameParameter, passwordParameter, responseMessage, idCard);
-        }
-    
         public virtual int PR_CreateUser(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, ObjectParameter responseMessage)
         {
             var idCardParameter = idCard.HasValue ?
@@ -267,6 +254,68 @@ namespace Gran_Torismo_API.Models
                 new ObjectParameter("id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteAdmin", idParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> PR_GetUserByUsername(string username)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("PR_GetUserByUsername", usernameParameter);
+        }
+    
+        public virtual int PR_Follow(Nullable<decimal> idCard, Nullable<decimal> idFriend)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            var idFriendParameter = idFriend.HasValue ?
+                new ObjectParameter("IdFriend", idFriend) :
+                new ObjectParameter("IdFriend", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_Follow", idCardParameter, idFriendParameter);
+        }
+    
+        public virtual int PR_Unfollow(Nullable<decimal> idCard, Nullable<decimal> idFriend)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            var idFriendParameter = idFriend.HasValue ?
+                new ObjectParameter("IdFriend", idFriend) :
+                new ObjectParameter("IdFriend", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_Unfollow", idCardParameter, idFriendParameter);
+        }
+    
+        public virtual ObjectResult<PR_GetFollowers_Result> PR_GetFollowers(Nullable<decimal> idCard)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetFollowers_Result>("PR_GetFollowers", idCardParameter);
+        }
+    
+        public virtual ObjectResult<PR_GetFollowing_Result> PR_GetFollowing(Nullable<decimal> idCard)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetFollowing_Result>("PR_GetFollowing", idCardParameter);
+        }
+    
+        public virtual ObjectResult<PR_GetClient_Result> PR_GetClient(Nullable<decimal> idCard)
+        {
+            var idCardParameter = idCard.HasValue ?
+                new ObjectParameter("IdCard", idCard) :
+                new ObjectParameter("IdCard", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetClient_Result>("PR_GetClient", idCardParameter);
         }
     }
 }

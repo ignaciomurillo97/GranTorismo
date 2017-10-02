@@ -16,6 +16,7 @@ namespace Gran_Torismo_API.Models
         public string LastName { get; set; }
         public string SecondLastName { get; set; }
     }
+
     public class Client
     {
         public User User { get; set; }
@@ -31,4 +32,25 @@ namespace Gran_Torismo_API.Models
     {
         public User User { get; set; }
     }
+
+    public class FollowUnfollowModel
+    {
+        public decimal IdCard { get; set; }
+        public decimal IdFriend { get; set; }
+    }
+
+    public class ProfileModel
+    {
+        public decimal IdCard { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string SecondLastName { get; set; }
+        public decimal AccountNumber { get; set; }
+        public decimal Followers { get; set; }
+        public decimal Following { get; set; }
+    }
+
 }
