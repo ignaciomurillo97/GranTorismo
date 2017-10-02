@@ -134,7 +134,22 @@ CREATE PROCEDURE [PR_GetUser](
 END
 GO
 
-<<<<<<< HEAD
+CREATE PROCEDURE [PR_GetClient](
+	@IdCard NUMERIC(20)
+)AS BEGIN
+	SELECT CD.* FROM [ClientDetails] CD
+	INNER JOIN [Client] C ON CD.IdCard = C.IdCard
+	WHERE CD.IdCard = @IdCard
+END
+GO
+
+alter PROCEDURE [PR_GetUserByUsername](
+	@Username VARCHAR(25)
+)AS BEGIN
+	SELECT IdCard FROM [ClientDetails] WHERE Username = @Username
+END
+GO
+
 CREATE PROCEDURE [PR_CreateLocal]
 AS BEGIN
 	INSERT INTO [Service] ([State], [CreationDate])
@@ -142,7 +157,7 @@ AS BEGIN
 	SELECT @@IDENTITY
 END
 GO
-=======
+
 CREATE PROCEDURE [PR_EditCategory](
 	@Name VARCHAR(MAX),
 	@Id INT
@@ -165,8 +180,6 @@ CREATE PROCEDURE [PR_DeleteCategory] (
 	DELETE [Category] WHERE IdCategory = @Id
 END
 GO
-
-exec [PR_GetAdmins]
 
 CREATE PROCEDURE [PR_DeleteAdmin](
 	@id INT 
@@ -201,5 +214,44 @@ CREATE PROCEDURE [PR_CreateAdmin] (
 END
 GO
 
+CREATE PROCEDURE [PR_GetFollowing](
+	@IdCard NUMERIC(20)
+)AS BEGIN
+	SELECT U.* 
+	FROM [Follower] F
+	INNER JOIN [ClientDetails] U
+		ON F.IdFriend = U.IdCard
+	WHERE F.IdCard = @IdCard
+END
+GO
 
->>>>>>> b9550a69ce3bdb154661d9e2444be20e3974ed39
+CREATE PROCEDURE [PR_GetFollowers](
+	@IdCard NUMERIC(20)
+)AS BEGIN
+	SELECT U.* 
+	FROM [Follower] F
+	INNER JOIN [ClientDetails] U
+		ON F.IdFriend = @IdCard
+	WHERE F.IdCard = U.IdCard
+END
+GO
+
+
+CREATE PROCEDURE [PR_Follow](
+	@IdCard NUMERIC(20),
+	@IdFriend NUMERIC(20)
+)AS BEGIN
+	INSERT INTO [Follower] VALUES (@IdCard, @IdFriend)
+END
+GO
+
+
+
+CREATE PROCEDURE [PR_Unfollow](
+	@IdCard NUMERIC(20),
+	@IdFriend NUMERIC(20)
+)AS BEGIN
+	DELETE FROM [Follower]
+	WHERE IdCard = @IdCard AND IdFriend = @IdFriend
+END
+GO

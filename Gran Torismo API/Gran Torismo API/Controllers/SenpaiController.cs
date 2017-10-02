@@ -60,7 +60,7 @@ namespace Gran_Torismo_API.Controllers
         // Elimina un administrador
         [Route("api/Administradores/Delete/{idCard}")]
         [HttpPost]
-        public System.Web.Mvc.ActionResult DeleteAdministrador(long idCard)
+        public System.Web.Mvc.ActionResult DeleteAdministrador(int? idCard)
         {
             var ret = db.PR_DeleteAdmin(idCard);
              return new System.Web.Mvc.HttpStatusCodeResult(HttpStatusCode.OK);

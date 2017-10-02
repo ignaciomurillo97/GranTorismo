@@ -219,6 +219,15 @@
     <Compile Include="Models\PR_GetDistricts_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PR_GetClient_Result.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PR_GetFollowers_Result.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PR_GetFollowing_Result.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Server\MongoConnection.cs" />
     <Compile Include="Controllers\PruebaController.cs" />
     <Compile Include="Controllers\ShopController.cs" />

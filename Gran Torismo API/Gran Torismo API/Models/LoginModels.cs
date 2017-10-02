@@ -25,4 +25,9 @@ namespace Gran_Torismo_API.Models
     {
         public string Response { get; set; }
     }
+
+    public partial class findByUsernameRequest
+    {
+        public string username { get; set; }
+    }
 }
