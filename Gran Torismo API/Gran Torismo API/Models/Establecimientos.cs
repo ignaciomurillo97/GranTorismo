@@ -17,7 +17,7 @@ namespace Gran_Torismo_API.Models
             public double idDistrito { get; set; }
             public double latitud { get; set; }
             public double longitud { get; set; }
-            public BsonArray fotos { get; set; }
+            public int idOwner { get; set; }
 
     }
 

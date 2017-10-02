@@ -39,12 +39,6 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="SecondLastName" Type="varchar" MaxLength="50" />
           <Property Name="AccountNumber" Type="numeric" Precision="20" Scale="0" />
         </EntityType>
-        <Function Name="PR_ClientLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Username" Type="nvarchar" Mode="In" />
-          <Parameter Name="Password" Type="nvarchar" Mode="In" />
-          <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
-          <Parameter Name="IdCard" Type="numeric" Mode="InOut" />
-        </Function>
         <Function Name="PR_CreateClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -66,6 +60,7 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_CreateService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PR_CreateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
           <Parameter Name="Username" Type="varchar" Mode="In" />
@@ -76,6 +71,7 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Parameter Name="SecondLastName" Type="varchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="PR_GetDistricts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
         </Function>
@@ -179,6 +175,8 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="IdCard" Mode="InOut" Type="Decimal" />
           </FunctionImport>
+          <FunctionImport Name="PR_GetDistricts" ReturnType="Collection(GranTorismoModel.PR_GetDistricts_Result)" />
+          <FunctionImport Name="PR_CreateService" ReturnType="Collection(Decimal)" />
         </EntityContainer>
         <EntityType Name="Categories">
           <Key>
@@ -219,6 +217,10 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Name="SecondLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AccountNumber" Type="Decimal" Precision="20" Scale="0" />
         </EntityType>
+        <ComplexType Name="PR_GetDistricts_Result">
+          <Property Type="Int32" Name="IdDistrict" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="156" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -270,9 +272,17 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PR_ClientLogin1" FunctionName="GranTorismoModel.Store.PR_ClientLogin" />
           <FunctionImportMapping FunctionImportName="PR_CreateUser" FunctionName="GranTorismoModel.Store.PR_CreateUser" />
           <FunctionImportMapping FunctionImportName="PR_UserLogin" FunctionName="GranTorismoModel.Store.PR_UserLogin" />
+          <FunctionImportMapping FunctionImportName="PR_GetDistricts" FunctionName="GranTorismoModel.Store.PR_GetDistricts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GranTorismoModel.PR_GetDistricts_Result">
+                <ScalarProperty Name="IdDistrict" ColumnName="IdDistrict" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PR_CreateService" FunctionName="GranTorismoModel.Store.PR_CreateService" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

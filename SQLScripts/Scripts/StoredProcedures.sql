@@ -133,3 +133,11 @@ CREATE PROCEDURE [PR_GetUser](
 	SELECT * FROM [ClientDetails] WHERE IdCard = @IdCard
 END
 GO
+
+CREATE PROCEDURE [PR_CreateLocal]
+AS BEGIN
+	INSERT INTO [Service] ([State], [CreationDate])
+		VALUES (1, GETDATE()
+	SELECT @@IDENTITY
+END
+GO

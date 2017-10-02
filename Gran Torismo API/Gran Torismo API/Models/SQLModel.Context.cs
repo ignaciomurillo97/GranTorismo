@@ -194,5 +194,15 @@ namespace Gran_Torismo_API.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_UserLogin", usernameParameter, passwordParameter, responseMessage, idCard);
         }
+    
+        public virtual ObjectResult<PR_GetDistricts_Result> PR_GetDistricts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetDistricts_Result>("PR_GetDistricts");
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> PR_CreateService()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("PR_CreateService");
+        }
     }
 }
