@@ -1,3 +1,9 @@
+USE master
+GO
+
+DROP DATABASE GranTorismo
+GO
+
 CREATE DATABASE GranTorismo
 GO
 
@@ -82,15 +88,11 @@ CREATE TABLE [Follower] (
 );
 GO
 
-CREATE TABLE [Product] (
-  [IdProduct]	INT NOT NULL IDENTITY(1,1),
-  [Name] VARCHAR(50) NOT NULL,
-  [Price] MONEY NOT NULL,
-  [Description] VARCHAR(MAX),
-  [IdDistrict] INT NOT NULL,
-  [State] BIT NOT NULL DEFAULT 1
-  CONSTRAINT PK_IdProduct PRIMARY KEY(IdProduct),
-  CONSTRAINT FK_IdDistrict FOREIGN KEY(IdDistrict) REFERENCES [District]
+CREATE TABLE [Service] (
+  [IdService] INT NOT NULL IDENTITY(1,1),
+  [State] BIT NOT NULL DEFAULT 1,
+  [CreationDate] DATETIME NOT NULL
+  CONSTRAINT PK_IdProduct PRIMARY KEY(IdService)
 );
 GO
 
@@ -102,20 +104,20 @@ CREATE TABLE [Category](
 GO
 
 CREATE TABLE [ProductCategory](
-  [IdProduct] INT NOT NULL,
+  [IdService] INT NOT NULL,
   [IdCategory] INT NOT NULL
-  CONSTRAINT PK_ProductCategory PRIMARY KEY(IdProduct,IdCategory)
-  CONSTRAINT FK_ProductCategoryProduct FOREIGN KEY(IdProduct) REFERENCES [Product] ON DELETE CASCADE,
+  CONSTRAINT PK_ProductCategory PRIMARY KEY(IdService,IdCategory)
+  CONSTRAINT FK_ProductCategoryProduct FOREIGN KEY(IdService) REFERENCES [Service] ON DELETE CASCADE,
   CONSTRAINT FK_ProductCategoryCategory FOREIGN KEY(IdCategory) REFERENCES [Category]
 );
 GO
 
 CREATE TABLE [Package](
   [IdPackage] INT NOT NULL,
-  [IdProduct] INT NOT NULL
-  CONSTRAINT PK_Package PRIMARY KEY(IdPackage,IdProduct)
-  CONSTRAINT FK_PackagePackage FOREIGN KEY(IdProduct) REFERENCES [Product] ON DELETE CASCADE,
-  CONSTRAINT FK_PackageProduct FOREIGN KEY(IdProduct) REFERENCES [Product]
+  [IdService] INT NOT NULL
+  CONSTRAINT PK_Package PRIMARY KEY(IdPackage,IdService)
+  CONSTRAINT FK_PackagePackage FOREIGN KEY(IdService) REFERENCES [Service] ON DELETE CASCADE,
+  CONSTRAINT FK_PackageProduct FOREIGN KEY(IdService) REFERENCES [Service]
 );
 GO
 
@@ -151,4 +153,13 @@ CREATE TABLE [Review] (
   CONSTRAINT PK_IdReview PRIMARY KEY(IdReview)
   CONSTRAINT FK_ReviewIdClient FOREIGN KEY(IdClient) REFERENCES [Client] ON UPDATE CASCADE,
   CONSTRAINT FK_ReviewIdCheck FOREIGN KEY([IdCheck]) REFERENCES [Check]
+);
+GO
+
+CREATE TABLE [Likes](
+  [IdCard] NUMERIC(20) NOT NULL,
+  [IdService] INT NOT NULL
+  CONSTRAINT PK_Likes PRIMARY KEY(IdCard, IdService),
+  CONSTRAINT FK_CardLike FOREIGN KEY(IdCard) REFERENCES [Client] ON UPDATE CASCADE,
+  CONSTRAINT FK_ServiceLike FOREIGN KEY(IdService) REFERENCES [Service]
 );

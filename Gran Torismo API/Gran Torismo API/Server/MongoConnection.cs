@@ -76,6 +76,23 @@ namespace MongoConnect
             
         }
 
+        public ServiciosModel getServicio(int idService)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService);
+            ServiciosModel result;
+            try
+            {
+                result = collection.Find(filter).Single();
+            }
+            catch (InvalidOperationException e)
+            {
+                result = null;
+            }
+            return result;
+
+        }
+
         public List<ServiciosModel> getServicios(int idEstablishment)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");

@@ -18,7 +18,7 @@ namespace Gran_Torismo_API.Controllers
 {
     public class PruebaController : ApiController
     {
-        [Route("api/Producto/Registrar/Compra")]
+        [Route("api/Producto/Registrar/Compra/{idUsuario}/{idProducto}")]
         public IHttpActionResult RegistrarCompra(int idUsuario, int idProducto)
         {
             if (!ModelState.IsValid)
@@ -99,19 +99,6 @@ namespace Gran_Torismo_API.Controllers
             }
             var neo = NeoConnection.Instance;
             List<NeoProduct> res = neo.getRecomendationsByViews(idUsuario);
-            return Ok(res);
-        }
-
-        [Route("api/Producto/RecomendationsByCurrentView")]
-        [HttpPost]
-        public IHttpActionResult GetRecomendationsByCurrentView(int idProducto, int idUsuario)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var neo = NeoConnection.Instance;
-            List<NeoProduct> res = neo.GetRecomendationsByCurrentView(idProducto, idUsuario);
             return Ok(res);
         }
 
