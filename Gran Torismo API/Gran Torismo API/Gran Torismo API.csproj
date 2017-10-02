@@ -215,21 +215,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JhordanController.cs" />
-    <Compile Include="Controllers\SenpaiController.cs" />
-    <Compile Include="Models\AdminDetails.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Categories.cs">
-    <Compile Include="Models\CommonClass.cs" />
-    <Compile Include="Models\PR_GetClient_Result.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PR_GetDistricts_Result.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ClientDetails.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\CommonClass.cs" />
     <Compile Include="Models\PR_GetClient_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
@@ -243,9 +228,28 @@
     <Compile Include="Models\PR_GetFollowing_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Server\MongoConnection.cs" />
+    <Compile Include="Controllers\PruebaController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Categories.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClientDetails.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Establecimientos.cs" />
+    <Compile Include="Models\LoginModels.cs" />
+    <Compile Include="Server\NeoConnection.cs" />
     <Compile Include="Models\PR_GetUser_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Server\Redis.cs" />
     <Compile Include="Models\SQLModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -261,16 +265,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SQLModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Server\MongoConnection.cs" />
-    <Compile Include="Controllers\PruebaController.cs" />
-    <Compile Include="Controllers\ShopController.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Establecimientos.cs" />
-    <Compile Include="Models\LoginModels.cs" />
-    <Compile Include="Server\NeoConnection.cs" />
-    <Compile Include="Server\Redis.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
