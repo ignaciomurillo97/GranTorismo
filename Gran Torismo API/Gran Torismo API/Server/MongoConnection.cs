@@ -132,7 +132,25 @@ namespace MongoConnect
             };
         }
 
-        public bool addPhotos(ArrayList filesNames, string idService)
+        public bool editServicio(ServiciosModel servicio) {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", servicio.idService);
+            var update = Builders<ServiciosModel>.Update.Set("fotos", servicio.fotos)
+                .Set("nombre", servicio.nombre)
+                .Set("descripcion", servicio.descripcion)
+                .Set("precio", servicio.precio);
+            try
+            {
+                collection.FindOneAndUpdate(filter, update);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool addPhotos(BsonArray filesNames, string idService)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
             var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService);

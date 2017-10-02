@@ -17,6 +17,9 @@ using System.Web;
 using MongoConnect;
 using System.Diagnostics;
 using System.Collections;
+using System.Drawing.Imaging;
+using System.Net.Http.Headers;
+using MongoDB.Bson;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -57,6 +60,15 @@ namespace Gran_Torismo_API.Controllers
         }
 
         // Muestra los establecimientos
+        [Route("api/get/Establecimiento/{IdEstablecimiento}")]
+        [HttpGet]
+        public IHttpActionResult GetEstablecimientos(int IdEstablecimiento)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            return Ok(mongoConnection.getEstablecimiento(IdEstablecimiento));
+        }
+
+        // Muestra los establecimientos
         [Route("api/Establecimiento/Index/{IdOwner}")]
         [HttpGet]
         public IHttpActionResult GetEstablecimiento(int IdOwner)
@@ -80,21 +92,31 @@ namespace Gran_Torismo_API.Controllers
         {
             var mongoConnection = MongoConnection.Instance;
             int sqlService = Convert.ToInt32(db.PR_CreateService().ToList()[0]);
+            service.fotos = new BsonArray();
             service.idService = sqlService;
             var success = mongoConnection.createServicio(service);
+            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Images/" + sqlService + "/"));
             return (success) ? Ok(sqlService) : Ok(-1);
+        }
+
+        // Edita un Servicio
+        [Route("api/Servicio/Edit/")]
+        public IHttpActionResult EditService(ServiciosModel service)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            var success = mongoConnection.editServicio(service);
+            return Ok(success);
         }
 
         [Route("api/Upload")]
         public async Task<HttpResponseMessage> PostSurveys()
         {
             var idService = HttpContext.Current.Request.Form["idService"];
-            ArrayList filesNames = new ArrayList();
+            BsonArray filesNames = MongoConnection.Instance.getServicio(Convert.ToInt32(idService)).fotos;
             string uploadFolder = HttpContext.Current.Server.MapPath("~/App_Data");
             MultipartFormDataStreamProvider streamProvider = new MultipartFormDataStreamProvider(uploadFolder);
             MultipartFileStreamProvider multipartFileStreamProvider = await Request.Content.ReadAsMultipartAsync(streamProvider);
             string StoragePath = "~/Images/" + idService + "/";
-            Directory.CreateDirectory(HttpContext.Current.Server.MapPath(StoragePath));
             String filePath = HostingEnvironment.MapPath(StoragePath);
             foreach (MultipartFileData fileData in streamProvider.FileData)
             {
@@ -129,5 +151,41 @@ namespace Gran_Torismo_API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        // Get Service
+        [Route("api/get/Service/{IdServicio}")]
+        [HttpGet]
+        public IHttpActionResult getAPIServicio(int IdServicio)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            return Ok(mongoConnection.getServicio(IdServicio));
+        }
+
+        [Route("api/Show/Image/{name}/{idService}")]
+        [HttpGet]
+        public HttpResponseMessage GetPhoto(string name, int idService)
+        {
+            if (!name.Contains("."))
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            string ImagePath = "~/Images/" + idService + "/";
+            String filePath = HostingEnvironment.MapPath(ImagePath + name);
+            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Image image = Image.FromStream(fileStream);
+            MemoryStream memoryStream = new MemoryStream();
+            image.Save(memoryStream, ImageFormat.Jpeg);
+            result.Content = new ByteArrayContent(memoryStream.ToArray());
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+
+            return result;
+        }
+
+
+
     }
+
+
+
+
 }
