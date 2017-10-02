@@ -9,6 +9,7 @@ using Gran_Torismo_API.Models;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.IO;
+using System.Collections;
 
 namespace MongoConnect
 {
@@ -75,6 +76,23 @@ namespace MongoConnect
             
         }
 
+        public ServiciosModel getServicio(int idService)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService);
+            ServiciosModel result;
+            try
+            {
+                result = collection.Find(filter).Single();
+            }
+            catch (InvalidOperationException e)
+            {
+                result = null;
+            }
+            return result;
+
+        }
+
         public List<ServiciosModel> getServicios(int idEstablishment)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
@@ -93,12 +111,55 @@ namespace MongoConnect
 
         }
 
-        public List<Establecimientos> getTodosEstablecimientos()
+        public List<Establecimientos> getTodosEstablecimientos(int IdOwner)
         {
             var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
-            var filter = Builders<Establecimientos>.Filter.Empty;
+            var filter = Builders<Establecimientos>.Filter.Eq("idOwner", IdOwner);
             List<Establecimientos> result = collection.Find(filter).ToList();
             return result;
+        }
+
+        public bool createEstablecimiento(Establecimientos establecimiento)
+        {
+            try
+            {
+                var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
+                collection.InsertOne(establecimiento);
+                return true;
+            }
+            catch {
+                return false;
+            };
+        }
+
+        public bool addPhotos(ArrayList filesNames, string idService)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService);
+            var update = Builders<ServiciosModel>.Update.Set("fotos", filesNames);
+            try
+            {
+                collection.FindOneAndUpdate(filter, update);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool createServicio(ServiciosModel servicio)
+        {
+            try
+            {
+                var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+                collection.InsertOne(servicio);
+                return true;
+            }
+            catch
+            {
+                return false;
+            };
         }
 
     }

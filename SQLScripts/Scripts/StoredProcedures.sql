@@ -150,6 +150,14 @@ alter PROCEDURE [PR_GetUserByUsername](
 END
 GO
 
+CREATE PROCEDURE [PR_CreateLocal]
+AS BEGIN
+	INSERT INTO [Service] ([State], [CreationDate])
+		VALUES (1, GETDATE()
+	SELECT @@IDENTITY
+END
+GO
+
 CREATE PROCEDURE [PR_EditCategory](
 	@Name VARCHAR(MAX),
 	@Id INT
@@ -172,8 +180,6 @@ CREATE PROCEDURE [PR_DeleteCategory] (
 	DELETE [Category] WHERE IdCategory = @Id
 END
 GO
-
-exec [PR_GetAdmins]
 
 CREATE PROCEDURE [PR_DeleteAdmin](
 	@id INT 
@@ -249,5 +255,3 @@ CREATE PROCEDURE [PR_Unfollow](
 	WHERE IdCard = @IdCard AND IdFriend = @IdFriend
 END
 GO
-
-
