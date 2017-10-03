@@ -104,10 +104,11 @@ namespace Gran_Torismo_API.Controllers
         // Devuelve todos los productos
         [Route("api/Product/")]
         [HttpGet]
-        public IHttpActionResult GetProducts(int userId, int productId)
+        public IHttpActionResult GetProducts()
         {
-            //TODO devolver los productos de mongo
-            return Ok(1);
+            var mongoConnection = MongoConnection.Instance;
+            List<ServiciosModel> servicios = mongoConnection.getTodosServicios();
+            return Ok(servicios);
         }
 
         [Route("api/Product/Recomendations/View/{idProducto}")]

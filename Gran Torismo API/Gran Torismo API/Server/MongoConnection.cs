@@ -31,7 +31,7 @@ namespace MongoConnect
                 return instance;
             }
         }
-        
+
         private MongoConnection()
         {
 
@@ -49,18 +49,20 @@ namespace MongoConnect
         public Establecimientos getEstablecimiento(int idEstablishment)
         {
             var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
-            var filter = Builders<Establecimientos>.Filter.Eq("idEstablishment" , idEstablishment);
+            var filter = Builders<Establecimientos>.Filter.Eq("idEstablishment", idEstablishment);
             Establecimientos result;
-            try {
+            try
+            {
                 result = collection.Find(filter).Single();
-            }catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 result = null;
             }
             return result;
         }
 
-        public ServiciosModel getServicio(int idService , int idEstablishment)
+        public ServiciosModel getServicio(int idService, int idEstablishment)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
             var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService) & Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
@@ -69,11 +71,12 @@ namespace MongoConnect
             {
                 result = collection.Find(filter).Single();
             }
-            catch (InvalidOperationException e) {
+            catch (InvalidOperationException e)
+            {
                 result = null;
             }
             return result;
-            
+
         }
 
         public ServiciosModel getServicio(int idService)
@@ -127,12 +130,14 @@ namespace MongoConnect
                 collection.InsertOne(establecimiento);
                 return true;
             }
-            catch {
+            catch
+            {
                 return false;
             };
         }
 
-        public bool editServicio(ServiciosModel servicio) {
+        public bool editServicio(ServiciosModel servicio)
+        {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
             var filter = Builders<ServiciosModel>.Filter.Eq("idService", servicio.idService);
             var update = Builders<ServiciosModel>.Update.Set("fotos", servicio.fotos)
