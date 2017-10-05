@@ -265,3 +265,24 @@ AS BEGIN
 	SELECT @@IDENTITY
 END
 GO
+
+
+
+CREATE PROCEDURE [PR_GetServices]
+AS BEGIN
+SELECT * from [Service]
+END
+GO
+
+
+CREATE PROCEDURE [PR_EditService](
+	@Id int,
+	@state bit 
+)
+AS BEGIN
+Update Service SET [State] = @state WHERE IdService = @Id
+END
+GO
+
+select * from AdminDetails
+insert into District values ('caca', 1)
