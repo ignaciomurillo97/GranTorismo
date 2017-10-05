@@ -18,7 +18,7 @@ namespace Gran_Torismo_API.Controllers
 
         // POST: api/Login (nani?)
         [Route("api/Shop/Categories")]
-        [ResponseType(typeof(Categories))]
+        [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategories()
         {
             return Ok(db.Categories);
@@ -44,7 +44,7 @@ namespace Gran_Torismo_API.Controllers
 
         // Retorna todo el carrito
         [Route("api/Cart/{userId}")]
-        [ResponseType(typeof(Categories))]
+        [ResponseType(typeof(Category))]
         [HttpGet]
         public IHttpActionResult GetCart(int userId)
         {

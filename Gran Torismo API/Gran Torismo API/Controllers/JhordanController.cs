@@ -59,6 +59,16 @@ namespace Gran_Torismo_API.Controllers
             return Ok(success);
         }
 
+        // Registra un establecimiento
+        [Route("api/Establecimiento/Edit")]
+        [HttpPost]
+        public IHttpActionResult EditEstablecimiento(Establecimientos establecimiento)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            var success = mongoConnection.editEstablecimiento(establecimiento);
+            return Ok(success);
+        }
+
         // Muestra los establecimientos
         [Route("api/get/Establecimiento/{IdEstablecimiento}")]
         [HttpGet]
@@ -86,12 +96,27 @@ namespace Gran_Torismo_API.Controllers
             return Ok(mongoConnection.getServicios(IdEstablecimiento));
         }
 
+
+        // Muestra todos los servicios
+        [Route("api/get/Servicios/")]
+        [HttpGet]
+        public IHttpActionResult GetServicios()
+        {
+            var mongoConnection = MongoConnection.Instance;
+            return Ok(mongoConnection.getTodosServicios());
+        }
+
+
         // Registra un Servicio
         [Route("api/Servicio/Create")]
         public IHttpActionResult CreateService(ServiciosModel service)
         {
             var mongoConnection = MongoConnection.Instance;
             int sqlService = Convert.ToInt32(db.PR_CreateService().ToList()[0]);
+
+            string[] services = HttpContext.Current.Request.Form.GetValues("packageServices");
+            AddPackage(sqlService,services);
+
             service.fotos = new BsonArray();
             service.idService = sqlService;
             var success = mongoConnection.createServicio(service);
@@ -99,13 +124,33 @@ namespace Gran_Torismo_API.Controllers
             return (success) ? Ok(sqlService) : Ok(-1);
         }
 
+
         // Edita un Servicio
         [Route("api/Servicio/Edit/")]
         public IHttpActionResult EditService(ServiciosModel service)
         {
             var mongoConnection = MongoConnection.Instance;
             var success = mongoConnection.editServicio(service);
+            string[] services = HttpContext.Current.Request.Form.GetValues("packageServices");
+            UpdatePackage(service.idService, services);
             return Ok(success);
+        }
+
+        public void UpdatePackage(int idService, string[] services)
+        {
+            db.PR_DeletePackage(idService);
+            AddPackage(idService, services);
+        }
+
+        public void AddPackage(int package, string[] services)
+        {
+            if (services != null)
+            {
+                foreach (string idService in services)
+                {
+                    db.PR_AddToPackage(package, Convert.ToInt32(idService));
+                }
+            }
         }
 
         [Route("api/Upload")]
@@ -125,10 +170,6 @@ namespace Gran_Torismo_API.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted");
                 }
                 string fileName =  fileData.Headers.ContentDisposition.FileName;
-                Console.WriteLine("----------------------------------------------------------");
-                Console.WriteLine(fileName);
-                Debug.WriteLine("----------------------------------------------------------");
-                Debug.WriteLine(fileName);
                 if (fileName.StartsWith("\"") && fileName.EndsWith("\""))
                 {
                     fileName = fileName.Trim('"');
@@ -158,6 +199,15 @@ namespace Gran_Torismo_API.Controllers
         {
             var mongoConnection = MongoConnection.Instance;
             return Ok(mongoConnection.getServicio(IdServicio));
+        }
+
+        [Route("api/get/Package/{IdServicio}")]
+        [HttpGet]
+        public IHttpActionResult getPackage(int IdServicio)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            List<int?> servicios = db.PR_GetPackage(IdServicio).ToList();
+            return Ok(mongoConnection.getServiciosFromList(servicios));
         }
 
         [Route("api/Show/Image/{name}/{idService}")]

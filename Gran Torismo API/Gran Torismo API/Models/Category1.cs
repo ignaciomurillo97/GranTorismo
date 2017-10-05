@@ -12,14 +12,9 @@ namespace Gran_Torismo_API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ClientDetails
+    public partial class Category1
     {
-        public decimal IdCard { get; set; }
-        public string Username { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string SecondLastName { get; set; }
-        public Nullable<decimal> AccountNumber { get; set; }
+        public int IdCategory { get; set; }
+        public string Name { get; set; }
     }
 }
