@@ -269,4 +269,27 @@ FROM [Province] P
 	INNER JOIN [District] D ON D.IdCanton = C.IdCanton
 
 END
+GO	
+
+CREATE PROCEDURE [PR_AddToPackage](
+	@IdPackage INT,
+	@IdService INT
+)AS BEGIN
+	INSERT INTO [Package] VALUES(@IdPackage, @IdService)
+END
+GO
+
+
+CREATE PROCEDURE [PR_GetPackage](
+	@IdPackage INT
+)AS BEGIN
+	SELECT IdService FROM [Package] WHERE IdPackage = @IdPackage
+END
+GO
+
+alter PROCEDURE [PR_DeletePackage](
+	@IdPackage INT
+)AS BEGIN
+	DELETE [Package] WHERE IdPackage = @IdPackage
+END
 GO

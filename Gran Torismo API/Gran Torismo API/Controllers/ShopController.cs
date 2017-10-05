@@ -18,7 +18,7 @@ namespace Gran_Torismo_API.Controllers
 
         // POST: api/Login (nani?)
         [Route("api/Shop/Categories")]
-        [ResponseType(typeof(Categories))]
+        [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategories()
         {
             return Ok(db.Categories);
@@ -44,7 +44,7 @@ namespace Gran_Torismo_API.Controllers
 
         // Retorna todo el carrito
         [Route("api/Cart/{userId}")]
-        [ResponseType(typeof(Categories))]
+        [ResponseType(typeof(Category))]
         [HttpGet]
         public IHttpActionResult GetCart(int userId)
         {
@@ -104,11 +104,10 @@ namespace Gran_Torismo_API.Controllers
         // Devuelve todos los productos
         [Route("api/Product/")]
         [HttpGet]
-        public IHttpActionResult GetProducts()
+        public IHttpActionResult GetProducts(int userId, int productId)
         {
-            var mongoConnection = MongoConnection.Instance;
-            List<ServiciosModel> servicios = mongoConnection.getTodosServicios();
-            return Ok(servicios);
+            //TODO devolver los productos de mongo
+            return Ok(1);
         }
 
         [Route("api/Product/Recomendations/View/{idProducto}")]

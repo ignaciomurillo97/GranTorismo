@@ -215,17 +215,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JhordanController.cs" />
-    <Compile Include="Controllers\SenpaiController.cs" />
-    <Compile Include="Models\AdminDetails.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Categories.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClientDetails.cs">
+    <Compile Include="Models\Category1.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClientDetail.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CommonClass.cs" />
