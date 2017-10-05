@@ -42,6 +42,24 @@ namespace Gran_Torismo_API.Controllers
             return Ok(res);
         }
 
+        [Route("prueba/Usuario/{id}")]
+        [HttpPost]
+        public IHttpActionResult addUser(int id)
+        {
+            var neo = NeoConnection.Instance;
+            neo.AddUser(id);
+            return Ok("orkas");
+        }
+
+        [Route("prueba/Product/{id}")]
+        [HttpPost]
+        public IHttpActionResult addProduct(int id)
+        {
+            var neo = NeoConnection.Instance;
+            neo.AddProduct(id);
+            return Ok("orkas");
+        }
+
         [Route("api/Producto")]
         public IHttpActionResult getAllProducts()
         {
