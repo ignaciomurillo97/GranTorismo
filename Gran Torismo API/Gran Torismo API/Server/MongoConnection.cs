@@ -60,22 +60,6 @@ namespace MongoConnect
             return result;
         }
 
-        public ServiciosModel getServicio(int idService , int idEstablishment)
-        {
-            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
-            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService) & Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
-            ServiciosModel result;
-            try
-            {
-                result = collection.Find(filter).Single();
-            }
-            catch (InvalidOperationException e) {
-                result = null;
-            }
-            return result;
-            
-        }
-
         public ServiciosModel getServicio(int idService)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");

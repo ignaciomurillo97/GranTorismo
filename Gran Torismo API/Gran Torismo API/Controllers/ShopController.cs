@@ -58,6 +58,15 @@ namespace Gran_Torismo_API.Controllers
             return Ok(services);
         }
 
+        [Route("api/Cart/ItemCount/{userId}")]
+        [HttpGet]
+        public IHttpActionResult GetCartLength(int userId)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            List<int> cart = Redis.GetCart(userId);
+            return Ok(cart.Count());
+        }
+
         // Agrega producto a las BD
         [Route("api/Product/{productId}")]
         [HttpPost]
@@ -112,8 +121,19 @@ namespace Gran_Torismo_API.Controllers
             return Ok(res);
         }
 
+        // Devuelve todos los productos
+        [Route("api/Product/{serviceId}")]
+        [HttpGet]
+        public IHttpActionResult GetProducts(int serviceId)
+        {
+            //TODO devolver los productos de mongo
+            var mongoConnection = MongoConnection.Instance;
+            ServiciosModel res = mongoConnection.getServicio(serviceId);
+            return Ok(res);
+        }
+
         [Route("api/Product/Recomendations/View/{idProducto}")]
-        [HttpPost]
+        [HttpGet]
         public IHttpActionResult GetRecomendationsByCurrentView(int idProducto)
         {
             var neo = NeoConnection.Instance;
