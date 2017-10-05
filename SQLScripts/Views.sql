@@ -16,6 +16,3 @@ SELECT U.IdCard,U.Username,U.FirstName,U.MiddleName,U.LastName,U.SecondLastName
 FROM [dbo].[User] U
 Inner JOIN [dbo].[Admin] C ON U.IdCard = C.IdCard
 GO
-
-select * from AdminDetails
-select * from [User]

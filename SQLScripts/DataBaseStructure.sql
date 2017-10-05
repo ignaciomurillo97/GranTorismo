@@ -1,4 +1,4 @@
-USE master
+USE G
 GO
 
 DROP DATABASE GranTorismo
@@ -87,6 +87,8 @@ CREATE TABLE [Follower] (
   CONSTRAINT FK_Follow FOREIGN KEY(IdFriend) REFERENCES [Client]
 );
 GO
+select * from Client
+INSERT INTO [Follower] VALUES (123, 12498413)
 
 CREATE TABLE [Service] (
   [IdService] INT NOT NULL IDENTITY(1,1),
