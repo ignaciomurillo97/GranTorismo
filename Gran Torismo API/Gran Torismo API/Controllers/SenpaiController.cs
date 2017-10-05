@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NeoConnect;
+using MongoConnect;
+using System.Diagnostics;
 
 namespace Gran_Torismo_API.Controllers
 {
@@ -49,8 +51,7 @@ namespace Gran_Torismo_API.Controllers
         }
 
         //Get all admins  
-        [Route("api/Administradores/Get")]
-        
+        [Route("api/Administradores/Get")]        
         public IHttpActionResult GetAdmins()
         {
             var ret = db.AdminDetails.ToList();
@@ -79,6 +80,46 @@ namespace Gran_Torismo_API.Controllers
             return Ok(ret);
         }
 
+
+
+      
+
+        // Get all services
+        [Route("api/Servicios/Get/all")]
+        [HttpGet]
+        public IHttpActionResult GetServices()
+        {
+            var mongoInstance = MongoConnection.Instance;
+
+            ObjectParameter output = new ObjectParameter("responseMessage", typeof(string));
+            var SQLServices = db.PR_GetServices().ToList();
+            List<ServiciosSQLModel> services = new List<ServiciosSQLModel>();
+            foreach (PR_GetServices_Result service in SQLServices)
+            {
+                ServiciosModel mongoService = mongoInstance.getServicio(service.IdService);
+                ServiciosSQLModel currService = new ServiciosSQLModel
+                {
+                    idService = mongoService.idService,
+                    nombre = mongoService.nombre,
+                    precio = mongoService.precio,
+                    status = service.State
+                };
+
+                services.Add(currService);
+
+            }
+            return Ok(services);
+        }
+
+
+        // Edit Service state
+        [Route("api/Servicios/Edit/Status/")]
+        [HttpPost]
+        public IHttpActionResult EditServiceStatus(ServiceEstatus service)
+        {
+            var ret = db.PR_EditService(service.IdService, service.Status);
+            return Ok(ret);
+        }
 
     }
 }

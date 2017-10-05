@@ -45,4 +45,20 @@ namespace Gran_Torismo_API.Models
         [BsonElement("fotos")]
         public BsonArray fotos { get; set; }
     }
+
+    public class ServiciosSQLModel
+    {
+        [BsonElement("idService")]
+        public int idService { get; set; }
+
+        [BsonElement("nombre")]
+        public string nombre { get; set; }        
+
+        [BsonElement("precio")]
+        public double precio { get; set; }
+
+        public Boolean status { get; set; }
+
+    }
+
 }

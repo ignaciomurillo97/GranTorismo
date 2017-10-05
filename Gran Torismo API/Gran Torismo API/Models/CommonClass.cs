@@ -15,4 +15,10 @@ namespace Gran_Torismo_API.Models
         public double Longitude { get; set; }
         public string fotos { get; set; }
     }
+
+    public class ServiceEstatus
+    {
+        public int IdService { get; set; }
+        public bool Status { get; set; }
+    }
 }
