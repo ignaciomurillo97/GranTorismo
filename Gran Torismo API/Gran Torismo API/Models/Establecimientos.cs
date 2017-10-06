@@ -11,7 +11,7 @@ namespace Gran_Torismo_API.Models
         {
 
             public ObjectId _id { get; set; }
-            public int idEstablishment { get; set; }
+            public long idEstablishment { get; set; }
             public string nombre { get; set; }
             public string descripcion { get; set; }
             public double idDistrito { get; set; }
@@ -31,7 +31,7 @@ namespace Gran_Torismo_API.Models
         public int idService { get; set; }
 
         [BsonElement("idEstablishment")]
-        public int idEstablishment { get; set; }
+        public long idEstablishment { get; set; }
 
         [BsonElement("nombre")]
         public string nombre { get; set; }

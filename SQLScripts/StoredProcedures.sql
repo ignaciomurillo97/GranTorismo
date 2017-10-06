@@ -298,3 +298,22 @@ AS BEGIN
 	SELECT @@IDENTITY
 END
 GO
+CREATE PROCEDURE PR_CreateCheck (
+	@clientId Numeric
+) AS BEGIN
+	INSERT INTO [Check] ([Date], [IdClient]) 
+	VALUES (GETDATE(), @clientId);
+	SELECT @@IDENTITY;
+END
+GO
+
+CREATE PROCEDURE PR_InsertCheckDetail (
+	@checkId NUMERIC,
+	@productName VARCHAR(50),
+	@unitaryPrice NUMERIC,
+	@quantity NUMERIC
+) AS  BEGIN
+	INSERT INTO CheckDetail ([IdCheck], [ProdcutName], [UnitaryPrice], [Quantity])
+	VALUES (@checkId, @productName, @unitaryPrice, @quantity);
+END
+GO
