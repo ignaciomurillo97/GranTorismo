@@ -121,5 +121,13 @@ namespace Gran_Torismo_API.Controllers
             return Ok(ret);
         }
 
+        //Create review
+        [Route("api/Review/Create")]
+        [HttpPost]
+        public IHttpActionResult createReview(Review review)
+        {
+            var ret = db.PR_CreateReview(review.IdClient, review.IdCheck, review.Description, review.Rating);
+            return Ok(ret);
+        }
     }
 }

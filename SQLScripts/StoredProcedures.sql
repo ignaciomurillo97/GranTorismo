@@ -284,5 +284,17 @@ Update Service SET [State] = @state WHERE IdService = @Id
 END
 GO
 
-select * from AdminDetails
-insert into District values ('caca', 1)
+
+
+CREATE PROCEDURE [PR_CreateReview]
+	@IdClient numeric,
+	@IdCheck int,
+	@Desc varchar(max),
+	@Rating numeric
+
+AS BEGIN
+	INSERT INTO [Review] ( [IdClient], [IdCheck], [Date], [Description], [Rating])
+		VALUES (@IdClient, @IdCheck, GETDATE(), @Desc, @Rating)	
+	SELECT @@IDENTITY
+END
+GO
