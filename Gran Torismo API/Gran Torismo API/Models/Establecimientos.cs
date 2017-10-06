@@ -40,7 +40,7 @@ namespace Gran_Torismo_API.Models
         public string descripcion { get; set; }
 
         [BsonElement("precio")]
-        public double precio { get; set; }
+        public int precio { get; set; }
 
         [BsonElement("fotos")]
         public BsonArray fotos { get; set; }

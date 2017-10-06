@@ -35,6 +35,12 @@ namespace RedisConnect
             db.ListRemove(cartKey(userId), serviceId, 1);
         }
 
+        public static void DeleteCart(int userId)
+        {
+            IDatabase db = redis.GetDatabase();
+            db.KeyDelete(cartKey(userId));
+        }
+
         private static string cartKey(int userId)
         {
             return userId.ToString() + "_cart";

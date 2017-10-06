@@ -146,5 +146,28 @@ namespace Gran_Torismo_API.Controllers
             }
             return Ok(services);
         }
+
+        [Route("api/Checkout/{userId}")]
+        [HttpPost]
+        public IHttpActionResult CheckOutServices(int userId)
+        {
+            var mongoConnection = MongoConnection.Instance;
+            var neo = NeoConnection.Instance;
+            int checkId = (int)db.PR_CreateCheck(userId).FirstOrDefault().Value;
+
+            List<int> cart = Redis.GetCart(userId);
+            foreach (int r in cart)
+            {
+                neo.AddUser(userId);
+                neo.AddProduct(r);
+                neo.AddPurchase(userId, r);
+                ServiciosModel servicio = mongoConnection.getServicio(r);
+                db.PR_InsertCheckDetail(checkId, servicio.nombre, servicio.precio, 1);
+            }
+
+            Redis.DeleteCart(userId);
+
+            return Ok(1);
+        }
     }
 }
