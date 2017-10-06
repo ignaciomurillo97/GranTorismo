@@ -143,6 +143,7 @@ namespace Gran_Torismo_API.Controllers
         [Route("api/Servicio/Edit/")]
         public IHttpActionResult EditService(ServiciosModel service)
         {
+            service.fotos = new BsonArray(HttpContext.Current.Request.Form["fotos"].Split(','));
             var mongoConnection = MongoConnection.Instance;
             var success = mongoConnection.editServicio(service);
             string[] services = HttpContext.Current.Request.Form.GetValues("packageServices");
