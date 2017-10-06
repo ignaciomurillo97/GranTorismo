@@ -134,7 +134,7 @@ namespace Gran_Torismo_API.Controllers
             service.idService = sqlService;
             var success = mongoConnection.createServicio(service);
             Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Images/" + sqlService + "/"));
-            //shopController.AddItem(sqlService);
+            shopController.AddItem(sqlService);
             return (success) ? Ok(sqlService) : Ok(-1);
         }
 
