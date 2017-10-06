@@ -317,3 +317,30 @@ CREATE PROCEDURE PR_InsertCheckDetail (
 	VALUES (@checkId, @productName, @unitaryPrice, @quantity);
 END
 GO
+
+
+CREATE PROCEDURE [PR_GetLike]
+	@IdClient numeric,
+	@IdService int
+AS BEGIN
+	Select count(*) from [Likes] where IdCard = @IdClient AND IdService = @IdService
+END
+GO
+
+CREATE PROCEDURE [PR_CreateLike]
+	@IdClient numeric,
+	@IdService int
+AS BEGIN
+	INSERT INTO [Likes] ([IdCard],[IdService])
+	VALUES (@IdClient, @IdService)
+END
+GO
+
+CREATE PROCEDURE [PR_DeleteLike]
+	@IdClient numeric,
+	@IdService int
+AS BEGIN
+	DELETE FROM [Likes]  where IdCard = @IdClient AND IdService = @IdService
+END
+GO
+

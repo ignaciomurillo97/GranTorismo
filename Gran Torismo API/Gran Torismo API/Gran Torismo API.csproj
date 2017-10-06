@@ -247,12 +247,6 @@
     <Compile Include="Models\PR_GetUser_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>SQLModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\SQLModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -129,5 +129,33 @@ namespace Gran_Torismo_API.Controllers
             var ret = db.PR_CreateReview(review.IdClient, review.IdCheck, review.Description, review.Rating);
             return Ok(ret);
         }
+
+
+        //GetLike
+        [Route("api/Like/Get/{IdClient}/{IdService}")]
+        [HttpGet]
+        public IHttpActionResult getLike(int IdClient, int IdService) {
+            var ret = db.PR_GetLike(IdClient, IdService);
+            return Ok(ret);
+        }
+
+        //Likear un producto/servicio
+        [Route("api/Like")]
+        [HttpPost]
+        public IHttpActionResult CreateLike(Like like)
+        {
+            var ret = db.PR_CreateLike(like.IdClient, like.IdService);
+            return Ok(ret);
+        }
+
+        //Dislikear un producto/servicio
+        [Route("api/Dislike")]
+        [HttpPost]
+        public IHttpActionResult DeleteLike(Like like)
+        {
+            var ret = db.PR_DeleteLike(like.IdClient, like.IdService);
+            return Ok(ret);
+        }
+
     }
 }

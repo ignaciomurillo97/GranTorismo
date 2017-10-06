@@ -30,4 +30,10 @@ namespace Gran_Torismo_API.Models
         public int Rating { get; set; }
     }
 
+    public class Like
+    {
+        public int IdClient { get; set; }
+        public int IdService { get; set; }        
+    }
+
 }
