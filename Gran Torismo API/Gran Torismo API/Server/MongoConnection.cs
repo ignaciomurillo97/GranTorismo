@@ -60,6 +60,22 @@ namespace MongoConnect
             return result;
         }
 
+        public ServiciosModel getServicio(int idService , int idEstablishment)
+        {
+            var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
+            var filter = Builders<ServiciosModel>.Filter.Eq("idService", idService) & Builders<ServiciosModel>.Filter.Eq("idEstablishment", idEstablishment);
+            ServiciosModel result;
+            try
+            {
+                result = collection.Find(filter).Single();
+            }
+            catch (InvalidOperationException e) {
+                result = null;
+            }
+            return result;
+            
+        }
+
         public ServiciosModel getServicio(int idService)
         {
             var collection = mongoDb.GetCollection<ServiciosModel>("Servicios");
@@ -102,10 +118,18 @@ namespace MongoConnect
 
         }
 
-        public List<Establecimientos> getTodosEstablecimientos(int IdOwner)
+        public List<Establecimientos> getEstablecimientos(int IdOwner)
         {
             var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
             var filter = Builders<Establecimientos>.Filter.Eq("idOwner", IdOwner);
+            List<Establecimientos> result = collection.Find(filter).ToList();
+            return result;
+        }
+
+        public List<Establecimientos> getTodosEstablecimientos()
+        {
+            var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
+            var filter = Builders<Establecimientos>.Filter.Empty;
             List<Establecimientos> result = collection.Find(filter).ToList();
             return result;
         }
