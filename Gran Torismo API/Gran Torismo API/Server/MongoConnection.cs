@@ -118,10 +118,18 @@ namespace MongoConnect
 
         }
 
-        public List<Establecimientos> getTodosEstablecimientos(int IdOwner)
+        public List<Establecimientos> getEstablecimientos(int IdOwner)
         {
             var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
             var filter = Builders<Establecimientos>.Filter.Eq("idOwner", IdOwner);
+            List<Establecimientos> result = collection.Find(filter).ToList();
+            return result;
+        }
+
+        public List<Establecimientos> getTodosEstablecimientos()
+        {
+            var collection = mongoDb.GetCollection<Establecimientos>("Establecimientos");
+            var filter = Builders<Establecimientos>.Filter.Empty;
             List<Establecimientos> result = collection.Find(filter).ToList();
             return result;
         }

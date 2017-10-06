@@ -84,8 +84,18 @@ namespace Gran_Torismo_API.Controllers
         public IHttpActionResult GetEstablecimiento(int IdOwner)
         {
             var mongoConnection = MongoConnection.Instance;
-            return Ok(mongoConnection.getTodosEstablecimientos(IdOwner));
+            return Ok(mongoConnection.getEstablecimientos(IdOwner));
         }
+
+        // Muestra todos los establecimientos
+        [Route("api/Establecimiento/get")]
+        [HttpGet]
+        public IHttpActionResult GetAllEstablecimientos()
+        {
+            var mongoConnection = MongoConnection.Instance;
+            return Ok(mongoConnection.getTodosEstablecimientos());
+        }
+
 
         // Muestra todos los servicios de un establecimiento
         [Route("api/Servicios/{IdEstablecimiento}")]
@@ -112,15 +122,19 @@ namespace Gran_Torismo_API.Controllers
         public IHttpActionResult CreateService(ServiciosModel service)
         {
             var mongoConnection = MongoConnection.Instance;
+            var shopController = new ShopController();
             int sqlService = Convert.ToInt32(db.PR_CreateService().ToList()[0]);
 
             string[] services = HttpContext.Current.Request.Form.GetValues("packageServices");
             AddPackage(sqlService,services);
+            string[] categories = HttpContext.Current.Request.Form.GetValues("categories");
+            AddCategories(sqlService, categories);
 
             service.fotos = new BsonArray();
             service.idService = sqlService;
             var success = mongoConnection.createServicio(service);
             Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~/Images/" + sqlService + "/"));
+            //shopController.AddItem(sqlService);
             return (success) ? Ok(sqlService) : Ok(-1);
         }
 
@@ -132,14 +146,27 @@ namespace Gran_Torismo_API.Controllers
             var mongoConnection = MongoConnection.Instance;
             var success = mongoConnection.editServicio(service);
             string[] services = HttpContext.Current.Request.Form.GetValues("packageServices");
+            string[] categories = HttpContext.Current.Request.Form.GetValues("categories");
             UpdatePackage(service.idService, services);
+            UpdatePCategorie(service.idService, categories);
             return Ok(success);
         }
 
-        public void UpdatePackage(int idService, string[] services)
+        public void AddCategories(int service, string[] categories)
         {
-            db.PR_DeletePackage(idService);
-            AddPackage(idService, services);
+            if (categories != null)
+            {
+                foreach (string categorie in categories)
+                {
+                    db.PR_AddPCategory(service, Convert.ToInt32(categorie));
+                }
+            }
+        }
+
+        public void UpdatePCategorie(int service, string[] categories)
+        {
+            db.PR_DeletePCategory(service);
+            AddCategories(service, categories);
         }
 
         public void AddPackage(int package, string[] services)
@@ -151,6 +178,12 @@ namespace Gran_Torismo_API.Controllers
                     db.PR_AddToPackage(package, Convert.ToInt32(idService));
                 }
             }
+        }
+
+        public void UpdatePackage(int idService, string[] services)
+        {
+            db.PR_DeletePackage(idService);
+            AddPackage(idService, services);
         }
 
         [Route("api/Upload")]
@@ -201,13 +234,24 @@ namespace Gran_Torismo_API.Controllers
             return Ok(mongoConnection.getServicio(IdServicio));
         }
 
+        [Route("api/get/Categorie/{IdServicio}")]
+        [HttpGet]
+        public IHttpActionResult getCategorie(int IdServicio)
+        {
+            return Ok(db.PR_GetPCategory(IdServicio).ToList());
+        }
+
         [Route("api/get/Package/{IdServicio}")]
         [HttpGet]
         public IHttpActionResult getPackage(int IdServicio)
         {
             var mongoConnection = MongoConnection.Instance;
             List<int?> servicios = db.PR_GetPackage(IdServicio).ToList();
-            return Ok(mongoConnection.getServiciosFromList(servicios));
+            if (servicios != null)
+            {
+                return Ok(mongoConnection.getServiciosFromList(servicios));
+            }
+            return Ok(new ArrayList());
         }
 
         [Route("api/Show/Image/{name}/{idService}")]
@@ -230,12 +274,5 @@ namespace Gran_Torismo_API.Controllers
 
             return result;
         }
-
-
-
     }
-
-
-
-
 }
