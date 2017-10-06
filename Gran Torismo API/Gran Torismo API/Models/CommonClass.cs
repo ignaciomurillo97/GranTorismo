@@ -21,4 +21,13 @@ namespace Gran_Torismo_API.Models
         public int IdService { get; set; }
         public bool Status { get; set; }
     }
+
+    public class Review
+    {
+        public int IdClient { get; set; }
+        public int IdCheck { get; set; }
+        public string Description { get; set; }
+        public int Rating { get; set; }
+    }
+
 }

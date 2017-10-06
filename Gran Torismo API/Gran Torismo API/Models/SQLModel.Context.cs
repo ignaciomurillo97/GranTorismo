@@ -28,21 +28,21 @@ namespace Gran_Torismo_API.Models
         }
     
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<ClientDetail> ClientDetails { get; set; }
-        public virtual DbSet<Category1> Category1 { get; set; }
         public virtual DbSet<AdminDetail> AdminDetails { get; set; }
+        public virtual DbSet<Category1> Categories1 { get; set; }
+        public virtual DbSet<ClientDetail> ClientDetails { get; set; }
     
-        public virtual int PR_AddToPackage(Nullable<int> idPackage, Nullable<int> idService)
+        public virtual int PR_ClientLogin(string username, string password, ObjectParameter responseMessage, ObjectParameter idCard)
         {
-            var idPackageParameter = idPackage.HasValue ?
-                new ObjectParameter("IdPackage", idPackage) :
-                new ObjectParameter("IdPackage", typeof(int));
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
     
-            var idServiceParameter = idService.HasValue ?
-                new ObjectParameter("IdService", idService) :
-                new ObjectParameter("IdService", typeof(int));
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_AddToPackage", idPackageParameter, idServiceParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_ClientLogin", usernameParameter, passwordParameter, responseMessage, idCard);
         }
     
         public virtual int PR_CreateAdmin(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, ObjectParameter responseMessage)
@@ -76,6 +76,15 @@ namespace Gran_Torismo_API.Models
                 new ObjectParameter("SecondLastName", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateAdmin", idCardParameter, usernameParameter, passwordParameter, firstNameParameter, middleNameParameter, lastNameParameter, secondLastNameParameter, responseMessage);
+        }
+    
+        public virtual int PR_CreateCategory(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateCategory", nameParameter);
         }
     
         public virtual int PR_CreateClient(Nullable<decimal> idCard, string username, string password, string firstName, string middleName, string lastName, string secondLastName, Nullable<decimal> accountNumber, ObjectParameter responseMessage)
@@ -148,6 +157,27 @@ namespace Gran_Torismo_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateOwner", idCardParameter, usernameParameter, passwordParameter, firstNameParameter, middleNameParameter, lastNameParameter, secondLastNameParameter, responseMessage);
         }
     
+        public virtual ObjectResult<Nullable<decimal>> PR_CreateReview(Nullable<decimal> idClient, Nullable<int> idCheck, string desc, Nullable<decimal> rating)
+        {
+            var idClientParameter = idClient.HasValue ?
+                new ObjectParameter("IdClient", idClient) :
+                new ObjectParameter("IdClient", typeof(decimal));
+    
+            var idCheckParameter = idCheck.HasValue ?
+                new ObjectParameter("IdCheck", idCheck) :
+                new ObjectParameter("IdCheck", typeof(int));
+    
+            var descParameter = desc != null ?
+                new ObjectParameter("Desc", desc) :
+                new ObjectParameter("Desc", typeof(string));
+    
+            var ratingParameter = rating.HasValue ?
+                new ObjectParameter("Rating", rating) :
+                new ObjectParameter("Rating", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("PR_CreateReview", idClientParameter, idCheckParameter, descParameter, ratingParameter);
+        }
+    
         public virtual ObjectResult<Nullable<decimal>> PR_CreateService()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("PR_CreateService");
@@ -186,13 +216,48 @@ namespace Gran_Torismo_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateUser", idCardParameter, usernameParameter, passwordParameter, firstNameParameter, middleNameParameter, lastNameParameter, secondLastNameParameter, responseMessage);
         }
     
-        public virtual int PR_DeletePackage(Nullable<int> idPackage)
+        public virtual int PR_DeleteAdmin(Nullable<int> id)
         {
-            var idPackageParameter = idPackage.HasValue ?
-                new ObjectParameter("IdPackage", idPackage) :
-                new ObjectParameter("IdPackage", typeof(int));
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeletePackage", idPackageParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteAdmin", idParameter);
+        }
+    
+        public virtual int PR_DeleteCategory(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteCategory", idParameter);
+        }
+    
+        public virtual int PR_EditCategory(string name, Nullable<int> id)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_EditCategory", nameParameter, idParameter);
+        }
+    
+        public virtual int PR_EditService(Nullable<int> id, Nullable<bool> state)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_EditService", idParameter, stateParameter);
         }
     
         public virtual int PR_Follow(Nullable<decimal> idCard, Nullable<decimal> idFriend)
@@ -240,13 +305,9 @@ namespace Gran_Torismo_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetFollowing_Result>("PR_GetFollowing", idCardParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> PR_GetPackage(Nullable<int> idPackage)
+        public virtual ObjectResult<PR_GetServices_Result> PR_GetServices()
         {
-            var idPackageParameter = idPackage.HasValue ?
-                new ObjectParameter("IdPackage", idPackage) :
-                new ObjectParameter("IdPackage", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("PR_GetPackage", idPackageParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetServices_Result>("PR_GetServices");
         }
     
         public virtual ObjectResult<PR_GetUser_Result> PR_GetUser(Nullable<decimal> idCard)
@@ -306,75 +367,66 @@ namespace Gran_Torismo_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_UsersLogin", usernameParameter, passwordParameter, responseMessage, idCard, rol);
         }
     
-        public virtual int PR_ClientLogin(string username, string password, ObjectParameter responseMessage, ObjectParameter idCard)
+        public virtual int PR_AddToPackage(Nullable<int> idPackage, Nullable<int> idService)
         {
-            var usernameParameter = username != null ?
-                new ObjectParameter("Username", username) :
-                new ObjectParameter("Username", typeof(string));
+            var idPackageParameter = idPackage.HasValue ?
+                new ObjectParameter("IdPackage", idPackage) :
+                new ObjectParameter("IdPackage", typeof(int));
     
-            var passwordParameter = password != null ?
-                new ObjectParameter("Password", password) :
-                new ObjectParameter("Password", typeof(string));
+            var idServiceParameter = idService.HasValue ?
+                new ObjectParameter("IdService", idService) :
+                new ObjectParameter("IdService", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_ClientLogin", usernameParameter, passwordParameter, responseMessage, idCard);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_AddToPackage", idPackageParameter, idServiceParameter);
         }
     
-        public virtual int PR_CreateCategory(string name)
+        public virtual int PR_DeletePackage(Nullable<int> idPackage)
         {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
+            var idPackageParameter = idPackage.HasValue ?
+                new ObjectParameter("IdPackage", idPackage) :
+                new ObjectParameter("IdPackage", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_CreateCategory", nameParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeletePackage", idPackageParameter);
         }
     
-        public virtual int PR_DeleteAdmin(Nullable<int> id)
+        public virtual ObjectResult<Nullable<int>> PR_GetPackage(Nullable<int> idPackage)
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
+            var idPackageParameter = idPackage.HasValue ?
+                new ObjectParameter("IdPackage", idPackage) :
+                new ObjectParameter("IdPackage", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteAdmin", idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("PR_GetPackage", idPackageParameter);
         }
     
-        public virtual int PR_DeleteCategory(Nullable<int> id)
+        public virtual int PR_AddPCategory(Nullable<int> idService, Nullable<int> idCategory)
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
+            var idServiceParameter = idService.HasValue ?
+                new ObjectParameter("IdService", idService) :
+                new ObjectParameter("IdService", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeleteCategory", idParameter);
+            var idCategoryParameter = idCategory.HasValue ?
+                new ObjectParameter("IdCategory", idCategory) :
+                new ObjectParameter("IdCategory", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_AddPCategory", idServiceParameter, idCategoryParameter);
         }
     
-        public virtual int PR_EditCategory(string name, Nullable<int> id)
+        public virtual int PR_DeletePCategory(Nullable<int> idService)
         {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
+            var idServiceParameter = idService.HasValue ?
+                new ObjectParameter("IdService", idService) :
+                new ObjectParameter("IdService", typeof(int));
     
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_EditCategory", nameParameter, idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_DeletePCategory", idServiceParameter);
         }
     
-        public virtual int PR_EditService(Nullable<int> id, Nullable<bool> state)
+        public virtual ObjectResult<Nullable<int>> PR_GetPCategory(Nullable<int> idService)
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
+            var idServiceParameter = idService.HasValue ?
+                new ObjectParameter("IdService", idService) :
+                new ObjectParameter("IdService", typeof(int));
     
-            var stateParameter = state.HasValue ?
-                new ObjectParameter("state", state) :
-                new ObjectParameter("state", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PR_EditService", idParameter, stateParameter);
-        }
-    
-        public virtual ObjectResult<PR_GetServices_Result> PR_GetServices()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetServices_Result>("PR_GetServices");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("PR_GetPCategory", idServiceParameter);
         }
     
         public virtual ObjectResult<Nullable<decimal>> PR_CreateCheck(Nullable<decimal> clientId)

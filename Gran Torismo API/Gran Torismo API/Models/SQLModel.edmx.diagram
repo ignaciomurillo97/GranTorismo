@@ -4,11 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e0ddb9b324e9416b86e035ee6cafd428" Name="Diagram1">
-        <EntityTypeShape EntityType="GranTorismoModel.Category" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GranTorismoModel.ClientDetail" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GranTorismoModel.Category1" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="GranTorismoModel.AdminDetail" Width="1.5" PointX="3.375" PointY="4.75" />
+      <Diagram DiagramId="d7218767237e43d6835ee0454339d4d3" Name="Diagram1">
+        <EntityTypeShape EntityType="SQLModel.Category" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SQLModel.AdminDetail" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SQLModel.Category1" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SQLModel.ClientDetail" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
