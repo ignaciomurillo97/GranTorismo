@@ -293,3 +293,27 @@ alter PROCEDURE [PR_DeletePackage](
 	DELETE [Package] WHERE IdPackage = @IdPackage
 END
 GO
+
+
+CREATE PROCEDURE [PR_AddPCategory](
+	@IdService INT,
+	@IdCategory INT
+)AS BEGIN
+	INSERT INTO [ProductCategory] VALUES(@IdService, @IdCategory)
+END
+GO
+
+
+CREATE PROCEDURE [PR_GetPCategory](
+	@IdService INT
+)AS BEGIN
+	SELECT IdCategory FROM [ProductCategory] WHERE IdService = @IdService
+END
+GO
+
+CREATE PROCEDURE [PR_DeletePCategory](
+	@IdService INT
+)AS BEGIN
+	DELETE [ProductCategory] WHERE IdService = @IdService
+END
+GO
