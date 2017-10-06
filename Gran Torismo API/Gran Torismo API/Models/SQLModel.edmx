@@ -175,6 +175,9 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
         <Function Name="PR_GetPCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdService" Type="int" Mode="In" />
         </Function>
+        <Function Name="PR_GetReviews" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdClient" Type="numeric" Mode="In" />
+        </Function>
         <Function Name="PR_GetServices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="PR_GetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdCard" Type="numeric" Mode="In" />
@@ -438,6 +441,9 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
             <Parameter Name="IdClient" Mode="In" Type="Decimal" />
             <Parameter Name="IdService" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="PR_GetReviews" ReturnType="Collection(SQLModel.PR_GetReviews_Result)">
+            <Parameter Name="IdClient" Mode="In" Type="Decimal" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="PR_GetClient_Result">
           <Property Type="Decimal" Name="IdCard" Nullable="false" Precision="20" Scale="0" />
@@ -483,6 +489,13 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="SecondLastName" Nullable="true" MaxLength="50" />
           <Property Type="Decimal" Name="AccountNumber" Nullable="true" Precision="20" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="PR_GetReviews_Result">
+          <Property Type="Int32" Name="IdReview" Nullable="false" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="Rating" Nullable="false" Precision="1" Scale="0" />
+          <Property Type="String" Name="Products" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -628,6 +641,17 @@ warning 6002: The table/view 'GranTorismo.dbo.ClientDetails' does not have a pri
           <FunctionImportMapping FunctionImportName="PR_CreateCheck" FunctionName="SQLModel.Store.PR_CreateCheck" />
           <FunctionImportMapping FunctionImportName="PR_InsertCheckDetail" FunctionName="SQLModel.Store.PR_InsertCheckDetail" />
           <FunctionImportMapping FunctionImportName="PR_GetLike" FunctionName="SQLModel.Store.PR_GetLike" />
+          <FunctionImportMapping FunctionImportName="PR_GetReviews" FunctionName="SQLModel.Store.PR_GetReviews">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SQLModel.PR_GetReviews_Result">
+                <ScalarProperty Name="IdReview" ColumnName="IdReview" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Products" ColumnName="Products" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

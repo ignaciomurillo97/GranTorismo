@@ -344,3 +344,12 @@ AS BEGIN
 END
 GO
 
+CREATE PROCEDURE [PR_GetReviews](
+	@IdClient NUMERIC
+)AS BEGIN
+	SELECT R.IdReview,R.[Date],R.[Description],R.Rating ,
+	STUFF((SELECT ',' + ProdcutName FROM CheckDetail WHERE IdCheck=R.IdCheck FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, '') Products
+	FROM [Review] R
+	WHERE R.IdClient = @IdClient
+END
+GO

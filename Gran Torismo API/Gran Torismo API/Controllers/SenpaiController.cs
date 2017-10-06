@@ -157,5 +157,14 @@ namespace Gran_Torismo_API.Controllers
             return Ok(ret);
         }
 
+        [Route("api/Reviews/Get/{IdClient}")]
+        [HttpGet]
+        public IHttpActionResult GetReviews(int IdClient)
+        {
+            var ret = db.PR_GetReviews(IdClient);
+            return Ok(ret);
+        }
+
+
     }
 }

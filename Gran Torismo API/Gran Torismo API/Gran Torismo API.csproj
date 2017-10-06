@@ -241,6 +241,9 @@
     <Compile Include="Models\PR_GetFollowing_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PR_GetReviews_Result.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PR_GetServices_Result.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>

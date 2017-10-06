@@ -497,5 +497,14 @@ namespace Gran_Torismo_API.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("PR_GetLike", idClientParameter, idServiceParameter);
         }
+    
+        public virtual ObjectResult<PR_GetReviews_Result> PR_GetReviews(Nullable<decimal> idClient)
+        {
+            var idClientParameter = idClient.HasValue ?
+                new ObjectParameter("IdClient", idClient) :
+                new ObjectParameter("IdClient", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PR_GetReviews_Result>("PR_GetReviews", idClientParameter);
+        }
     }
 }
